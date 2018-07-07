@@ -139,9 +139,13 @@ public class RUGUI extends JPanel {
 
 
 
-		//this.frame().pack();
-		this.frame().setBounds(ConfigFile.RUGUIX, ConfigFile.RUGUIY,
-									ConfigFile.RUGUIWidth, ConfigFile.RUGUIHeight);
+		if (ConfigFile.RUGUIWidth > 0 && ConfigFile.RUGUIHeight > 0) {
+			this.frame().setBounds(ConfigFile.RUGUIX, ConfigFile.RUGUIY,
+										ConfigFile.RUGUIWidth, ConfigFile.RUGUIHeight);
+		} else {
+			this.frame().setBounds(ConfigFile.RUGUIX, ConfigFile.RUGUIY,
+										800, 500);
+		}
 	}
 
 	public void windowClosing() {

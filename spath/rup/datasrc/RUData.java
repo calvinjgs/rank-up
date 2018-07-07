@@ -130,7 +130,10 @@ public class RUData {//are you?
 	//config settings
 	public static int textSize = 9;
 	public static int titleSize = textSize + 3;
-
+	public static void setTextSize(int ts) {
+		textSize = ts;
+		titleSize = ts + 3;
+	}
 	//package stuff
 	public static RUPackage WORKINGPACKAGE;
 

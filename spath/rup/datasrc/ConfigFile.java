@@ -65,6 +65,7 @@ public class ConfigFile {
 	public static void write() {
 		String s = "";
 		s += boilerplate() + RWFile.nl;
+		textSize = RUData.textSize;
 		if (textSize > 0) s += wrapln(textSizeTag, textSize +"");
 		if (RUEditorX > 0) s += wrapln(RUEditorXTag, RUEditorX + "");
 		if (RUEditorY > 0) s += wrapln(RUEditorYTag, RUEditorY + "");
@@ -120,8 +121,10 @@ public class ConfigFile {
 		//get text size
 		String s = nextArg(scnr, textSizeTag);
 		int integer = stringToInt(s);
-		if (integer > 0) textSize = integer;
-		RUData.textSize = textSize;
+		if (integer > 0) {
+			textSize = integer;
+			RUData.setTextSize(textSize);
+		}
 		//get editor positions
 		s = nextArg(scnr, RUEditorXTag);
 		integer = stringToInt(s);
