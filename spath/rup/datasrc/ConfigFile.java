@@ -121,6 +121,7 @@ public class ConfigFile {
 		String s = nextArg(scnr, textSizeTag);
 		int integer = stringToInt(s);
 		if (integer > 0) textSize = integer;
+		RUData.textSize = textSize;
 		//get editor positions
 		s = nextArg(scnr, RUEditorXTag);
 		integer = stringToInt(s);
