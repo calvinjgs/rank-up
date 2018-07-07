@@ -3,6 +3,7 @@ package rup.rusrc;
 import java.util.*;
 import java.io.*;
 
+import rup.datasrc.*;
 import rup.tools.*;
 
 public class ExportToText {
@@ -10,13 +11,12 @@ public class ExportToText {
 	public static final int headerSpaces = 30;
 	public static final int statSpaces = 10;
 
-
-	public static void exportArmy(SelectedUnit[][] army, ArmyRequirements armyReqs) {
+	public static void exportArmy(ArmyElement[][] army, ArmyRequirements armyReqs) {
 		String fn = army[0][0].force().name() + " " + armyReqs.pointsMax();
 		exportArmy(army, armyReqs, fn);
 	}
 
-	public static void exportArmy(SelectedUnit[][] army, ArmyRequirements armyReqs, String filename) {
+	public static void exportArmy(ArmyElement[][] army, ArmyRequirements armyReqs, String filename) {
 		String a = "";
 		//title
 		a += army[0][0].force().name() + " " + armyReqs.pointsMax() + " Point Army List";
@@ -33,12 +33,20 @@ public class ExportToText {
 		RWFile.printToFile(filename, a);
 	}
 
-	private static String detachmentBlock(SelectedUnit[] det) {
+	private static String detachmentBlock(ArmyElement[] det) {
 		String db = "";
-		for (int i = 0; i < det.length - 1; i++) {
-			db += unitBlock(det[i]) + RWFile.nl + RWFile.nl;
+		for (int i = 0; i < det.length; i++) {
+			if (det[i] instanceof SelectedUnit) {
+				SelectedUnit su = (SelectedUnit) det[i];
+				db += unitBlock(su);
+			} else if (det[i] instanceof Formation) {
+				Formation f = (Formation) det[i];
+				db += formationBlock(f);
+			}
+			if (i != det.length - 1) db += RWFile.nl + RWFile.nl;
+
 		}
-		db += unitBlock(det[det.length - 1]);
+
 		return db;
 	}
 
@@ -91,6 +99,33 @@ public class ExportToText {
 		}
 		return s;
 	}
+
+	private static String formationBlock(Formation f) {
+		String u = padSpaces(f.name(), headerSpaces);
+		u += padSpaces("Formation", headerSpaces);
+		u += padSpaces("", headerSpaces);
+		u += RWFile.nl;
+
+		u += padSpaces("", statSpaces);
+		u += padSpaces("", statSpaces);
+		u += padSpaces("", statSpaces);
+		u += padSpaces("", statSpaces);
+		u += padSpaces("", statSpaces);
+		u += padSpaces("", statSpaces);
+		u += "Pts";
+		u += RWFile.nl;
+		u += padSpaces("", statSpaces);
+		u += padSpaces("", statSpaces);
+		u += padSpaces("", statSpaces);
+		u += padSpaces("", statSpaces);
+		u += padSpaces("", statSpaces);
+		u += padSpaces("", statSpaces);
+		u += f.pts();
+		u += RWFile.nl;
+		u += "Description: " + f.description();
+		return u;
+	}
+
 
 	private static String padSpaces(String s, int spaces) {
 		s = String.format("%-" + spaces + "s", s);

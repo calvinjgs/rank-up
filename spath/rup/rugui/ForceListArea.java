@@ -34,13 +34,18 @@ public class ForceListArea extends JPanel implements TreeSelectionListener {
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
 		DefaultMutableTreeNode force = null;
 		DefaultMutableTreeNode unit = null;
+		DefaultMutableTreeNode formation = null;
 		for (int f = 0; f < forcelist.length; f++) {
 			force = new DefaultMutableTreeNode(new forceEntry(forcelist[f]));
 			for (int u = 0; u < forcelist[f].units().length; u++) {
 				unit = new DefaultMutableTreeNode(new unitEntry(forcelist[f].units(u)));
 				force.add(unit);
 			}
-			//TODO add formations nodes.
+			for (int m = 0; m < forcelist[f].formations().length; m++) {
+				formation = new DefaultMutableTreeNode(new formationEntry(forcelist[f].formations(m)));
+				force.add(formation);
+			}
+
 			root.add(force);
 		}
 		return root;
@@ -60,8 +65,15 @@ public class ForceListArea extends JPanel implements TreeSelectionListener {
 
 		Object obj = node.getUserObject();
 		if (node.isLeaf()) {
-			unitEntry ue = (unitEntry) (obj);
-			ui.setSelectedUnit(ue.unit);
+			if (obj instanceof unitEntry) {
+				unitEntry ue = (unitEntry) (obj);
+				ui.setSelectedUnit(ue.unit);
+			}
+			if (obj instanceof formationEntry) {
+				formationEntry ue = (formationEntry) (obj);
+				ui.setSelectedFormation(ue.formation);
+			}
+
 			this.ui.ARButton().setAdd();//switch add/remove btn to add
 		}
 		//call to refresh ui's displays
@@ -95,4 +107,16 @@ public class ForceListArea extends JPanel implements TreeSelectionListener {
 			return RUData.html(unit.name());
 		}
 	}
+
+	//define class that holds Formation object w/ formatted toString
+    class formationEntry {
+		public Formation formation;
+		public formationEntry(Formation f) {
+			this.formation = f;
+		}
+		public String toString() {
+			return RUData.html(formation.name());
+		}
+	}
+
 }

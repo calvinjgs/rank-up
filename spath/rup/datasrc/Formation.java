@@ -1,8 +1,9 @@
 package rup.datasrc;
 
-public class Formation {
+public class Formation extends ArmyElement {
 
 	private String name;
+	private Force force;
 	private String pts;
 	private String description;
 
@@ -19,6 +20,9 @@ public class Formation {
 	public void setName(String n) {
 		this.name = n;
 	}
+	public void setForce(Force f) {
+		this.force = f;
+	}
 	public void setPts(String p) {
 		this.pts = p;
 	}
@@ -29,6 +33,9 @@ public class Formation {
 	//return things
 	public String name() {
 		return this.name;
+	}
+	public Force force() {
+		return this.force;
 	}
 	public String pts() {
 		return this.pts;

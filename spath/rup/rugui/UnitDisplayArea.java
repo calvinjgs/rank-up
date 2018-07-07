@@ -75,6 +75,20 @@ public class UnitDisplayArea extends JPanel implements ListSelectionListener {
 		this.speclist.setListData(specentries);
 	}
 
+	public void displaySelectedFormation() {
+		Formation formation = this.ui.selectedFormation();
+		if (formation == null) return;
+		String a = "";
+
+		a += formation.name() + "<br>";
+		a += formation.pts() + "pts<br><br>";
+		a += formation.description();
+		this.stats.setText(RUData.html(a, tableTextSize));
+
+		//formations have no inherent specials
+		this.speclist.setListData(new specialEntry[0]);
+	}
+
 	public void valueChanged(ListSelectionEvent e) {
 		specialEntry se = this.speclist.getSelectedValue();
 		if (se != null) {

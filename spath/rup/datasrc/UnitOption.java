@@ -9,7 +9,15 @@ public class UnitOption {
 		this.flavours = new Flavour[0];
 	}
 
-
+	public UnitOption clone() {
+		UnitOption clone = new UnitOption();
+		Flavour[] flaves = new Flavour[this.flavours().length];
+		for (int i = 0; i < this.flavours().length; i++) {
+			flaves[i] = this.flavours(i).clone();
+		}
+		clone.setFlavours(flaves);
+		return clone;
+	}
 
 	public String toString() {
 		if (this.flavours.length == 0) return "undefined option";

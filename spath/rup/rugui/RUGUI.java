@@ -32,6 +32,7 @@ public class RUGUI extends JPanel {
 
 
 	private SelectedUnit selectedUnit;
+	private Formation selectedFormation;
 	private Army army;
 	private ArmyRequirements armyReqs;
 
@@ -58,10 +59,8 @@ public class RUGUI extends JPanel {
 		}
 		this.selectedPackages = selrups;
 		RUData.WORKINGPACKAGE = RUPackage.merge(this.selectedPackages);
+		RUData.WORKINGPACKAGE.applyUpdates();
 
-/*
-		this.forces = fs;
-*/
 		//create border layout
 		this.setLayout(new BorderLayout());
 
@@ -202,14 +201,25 @@ public class RUGUI extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			//because det area depends on army, det area must be modified first
 			if (isAdd) {
-				SelectedUnit cp = RUGUI.this.selectedUnit.copy();//creates new SelectedUnit
-				RUGUI.this.selectedUnit.setArtefact(null);//only 1 arty allowed
-				RUGUI.this.detachmentsArea().addUnit(cp);
-				RUGUI.this.army.addUnit(cp);
+				if (RUGUI.this.selectedUnit != null) {
+					SelectedUnit cp = RUGUI.this.selectedUnit.copy();//creates new SelectedUnit
+					RUGUI.this.selectedUnit.setArtefact(null);//only 1 arty allowed
+					RUGUI.this.detachmentsArea().addUnit(cp);
+					RUGUI.this.army.addUnit(cp);
+				} else if (RUGUI.this.selectedFormation != null) {
+					RUGUI.this.detachmentsArea().addUnit(RUGUI.this.selectedFormation);
+					RUGUI.this.army.addUnit(RUGUI.this.selectedFormation);
+				}
 			} else {//isRemove
-				SelectedUnit su = RUGUI.this.selectedUnit;
-				RUGUI.this.detachmentsArea().removeUnit(su);
-				RUGUI.this.army.removeUnit(su);
+				if (RUGUI.this.selectedUnit != null) {
+					SelectedUnit su = RUGUI.this.selectedUnit;
+					RUGUI.this.detachmentsArea().removeUnit(su);
+					RUGUI.this.army.removeUnit(su);
+				} else if (RUGUI.this.selectedFormation != null) {
+					Formation f = RUGUI.this.selectedFormation;
+					RUGUI.this.detachmentsArea().removeUnit(f);
+					RUGUI.this.army.removeUnit(f);
+				}
 			}
 			//update army requirements
 			RUGUI.this.armyReqs().buildRequirements(RUGUI.this.army.detachments());
@@ -230,6 +240,7 @@ public class RUGUI extends JPanel {
 	public void setSelectedPackages(RUPackage[] rups) {
 		this.selectedPackages = rups;
 		RUData.WORKINGPACKAGE = RUPackage.merge(this.selectedPackages);
+		RUData.WORKINGPACKAGE.applyUpdates();
 		this.packagesLabel.setText(RUData.html("Packages selected: " + RUData.WORKINGPACKAGE.name()));
 		this.forceListArea.refreshTree();
 	}
@@ -238,6 +249,7 @@ public class RUGUI extends JPanel {
 
 	public void setSelectedUnit(SelectedUnit su) {
 		this.selectedUnit = su;
+		this.selectedFormation = null;
 	}
 
 	public void setSelectedUnit(Unit u) {
@@ -246,9 +258,17 @@ public class RUGUI extends JPanel {
 		setSelectedUnit(su);
 	}
 
+	public void setSelectedFormation(Formation f) {
+		this.selectedFormation = f;
+		this.selectedUnit = null;
+	}
+
 	public void refreshDisplays() {
-		if (this.selectedUnit == null) return;
-		unitDisplayArea.displaySelectedUnit();
+		if (this.selectedUnit != null) {
+			unitDisplayArea.displaySelectedUnit();
+		} else if (this.selectedFormation != null) {
+			unitDisplayArea.displaySelectedFormation();
+		}
 		unitOptionsArea.displayUnitOptions();
 		requirementsArea.displayRequirements();
 	}
@@ -268,6 +288,9 @@ public class RUGUI extends JPanel {
 
 	public SelectedUnit selectedUnit() {
 		return this.selectedUnit;
+	}
+	public Formation selectedFormation() {
+		return this.selectedFormation;
 	}
 
 	public Army army() {

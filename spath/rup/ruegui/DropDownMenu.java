@@ -79,6 +79,7 @@ public class DropDownMenu<T> extends JPanel {
 	//return things
 	public T selectedItem() {
 		itemEntry ie = this.list.getItemAt(this.list.getSelectedIndex());
+		if (ie == null) return null;//for uninitialized list.
 		return (T) ie.item;
 	}
 	public int itemCount() {

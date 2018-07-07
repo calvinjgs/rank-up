@@ -25,6 +25,26 @@ public class Flavour {
 		this("");
 	}
 
+	public Flavour clone() {
+		Flavour clone = new Flavour();
+		clone.setName(new String(this.name()));
+		clone.setType(this.type());
+		//Elements in these arrays are not cloned.
+		//Haven't decided if it is important or not.
+		clone.setAddSpecials(this.addSpecials());
+		clone.setRemoveSpecials(this.removeSpecials());
+		clone.setDescription(this.description());
+		clone.setSp(this.sp());
+		clone.setMe(this.me());
+		clone.setRa(this.ra());
+		clone.setDe(this.de());
+		clone.setAtt(this.att());
+		clone.setNeW(this.neW());
+		clone.setNeR(this.neR());
+		clone.setPts(this.pts());
+		return clone;
+	}
+
 	public String toString() {
 		return this.name;
 	}

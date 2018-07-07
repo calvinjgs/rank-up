@@ -23,13 +23,11 @@ public class EditPackageMenu extends EditorPanel implements ActionListener {
 
 	private ListEditButtons flButtons, slButtons, alButtons;
 
-	private JButton saveButton, dependenciesButton;
-	String[] dependencies;
+	private JButton saveButton, unitUpdatesButton;
 
 	public EditPackageMenu(JFrame parent, RUPackage rup) {
 		super(new BorderLayout(), parent);
 		this.rupackage = rup;
-		this.dependencies = new String[0];
 		this.oldName = this.rupackage.name();
 		this.frame().setTitle(RUData.RUE_TITLE + " - Package");
 
@@ -57,6 +55,9 @@ public class EditPackageMenu extends EditorPanel implements ActionListener {
 		this.flButtons.addActionListener(this);
 		fpan.add(this.flButtons);
 		listspan.add(fpan);
+		this.unitUpdatesButton = new JButton(RUData.html("Unit Updates", RUData.titleSize));
+		fpan.add(this.unitUpdatesButton);
+		this.unitUpdatesButton.addActionListener(this);
 		//build specials list panel
 		JPanel span = new JPanel();
 		span.setLayout(new BoxLayout(span, BoxLayout.Y_AXIS));
@@ -97,7 +98,7 @@ public class EditPackageMenu extends EditorPanel implements ActionListener {
 		if (this.flButtons.isAddButtonEvent(e)) {
 			addForce();
 		} else if (this.flButtons.isEditButtonEvent(e)) {
-				editForce();
+			editForce();
 		} else if (this.flButtons.isDeleteButtonEvent(e)) {
 			this.forceList.removeSelectedItem();
 		} else if (this.flButtons.isUpButtonEvent(e)) {
@@ -127,6 +128,8 @@ public class EditPackageMenu extends EditorPanel implements ActionListener {
 			this.artifactList.moveUp();
 		} else if (this.alButtons.isDownButtonEvent(e)) {
 			this.artifactList.moveDown();
+		} else if (e.getSource() == this.unitUpdatesButton) {
+			editUnitUpdates();
 		} else if (e.getSource() == saveButton) {
 			System.out.println("save button clicked");
 			//save name
@@ -135,8 +138,6 @@ public class EditPackageMenu extends EditorPanel implements ActionListener {
 				this.rupackage.setName(newName);
 				System.out.println("new name is: " + this.rupackage.name());
 			}
-			//save dependencies
-			this.rupackage.setDependencies(dependencies);
 			//save forces
 			Force[] forces = new Force[this.forceList.length()];
 			for (int i = 0; i < forces.length; i++) {
@@ -155,6 +156,7 @@ public class EditPackageMenu extends EditorPanel implements ActionListener {
 				artifacts[i] = this.artifactList.item(i);
 			}
 			this.rupackage.setArtifacts(artifacts);
+
 
 			Compile.delete(Compile.getRUPackageFileName(this.oldName));
 			SavePackage.save(this.rupackage);
@@ -222,6 +224,10 @@ public class EditPackageMenu extends EditorPanel implements ActionListener {
 		}
 	}
 
+	public void editUnitUpdates() {
+		EditUnitUpdateListMenu euum = new EditUnitUpdateListMenu(this.frame(), this.rupackage.unitUpdates());
+		this.switchTo(euum);
+	}
 
 	public void panelShown() {
 		//refresh specials because other places can edit it.

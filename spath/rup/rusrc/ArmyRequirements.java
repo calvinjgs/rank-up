@@ -45,7 +45,7 @@ public class ArmyRequirements {
 		troopCurrent = wildCurrent = warEngCurrent = monCurrent = heroCurrent = null;
 	}
 
-	public void buildRequirements(SelectedUnit[][] dets) {
+	public void buildRequirements(ArmyElement[][] dets) {
 		resetValues();
 		troopMax = new int[dets.length];
 		wildMax = new int[dets.length];
@@ -61,42 +61,48 @@ public class ArmyRequirements {
 		isEvil = isGood = false;
 		for (int i = 0; i < dets.length; i++) {
 			for(int j = 0; j < dets[i].length; j++) {
-				SelectedUnit unit = dets[i][j];
-				//set alignment flags
-				isEvil = isEvil || unit.force().alignment() == RUData.ALIGNMENT.EVIL;
-				isGood = isGood || unit.force().alignment() == RUData.ALIGNMENT.GOOD;
-				//reqs from unit
-				//use some points
-				pointsCurrent += Integer.parseInt(unit.pts());
-				//set irregular boolean
-				boolean isIrregular = unit.name().endsWith("*");
-				//increase maximums for regiment
-				if (unit.sizeName().toLowerCase().equals(RUData.UNIT_SIZE.REGIMENT.toString()) && !isIrregular) {
+				if (dets[i][j] instanceof SelectedUnit) {
+					SelectedUnit unit = (SelectedUnit) dets[i][j];
+					//set alignment flags
+					isEvil = isEvil || unit.force().alignment() == RUData.ALIGNMENT.EVIL;
+					isGood = isGood || unit.force().alignment() == RUData.ALIGNMENT.GOOD;
+					//reqs from unit
+					//use some points
+					pointsCurrent += Integer.parseInt(unit.pts());
+					//set irregular boolean
+					boolean isIrregular = unit.name().endsWith("*");
+					//increase maximums for regiment
+					if (unit.sizeName().toLowerCase().equals(RUData.UNIT_SIZE.REGIMENT.toString()) && !isIrregular) {
 
-					troopMax[i] += 2;
-					wildMax[i] += 1;
+						troopMax[i] += 2;
+						wildMax[i] += 1;
 
+					}
+					//increase maximums for horde or legion
+					if ((unit.sizeName().toLowerCase().equals(RUData.UNIT_SIZE.HORDE.toString()) ||
+						unit.sizeName().toLowerCase().equals(RUData.UNIT_SIZE.LEGION.toString())) && !isIrregular) {
+							troopMax[i] += 4;
+							warEngMax[i] += 1;
+							monMax[i] += 1;
+							heroMax[i] += 1;
+					}
+					//use troop slot
+					if (unit.sizeName().toLowerCase().equals(RUData.UNIT_SIZE.TROOP.toString()) || isIrregular)
+						troopCurrent[i]++;
+					//use war engine slot
+					if (unit.type() == RUData.UNIT_TYPE.WAR_ENGINE && !isIrregular)
+						warEngCurrent[i]++;
+					//use monster slot
+					if (unit.type() == RUData.UNIT_TYPE.MONSTER && !isIrregular)
+						monCurrent[i]++;
+					//use hero slot (keep an eye on this, using ordinal() is dangerous)
+					if (unit.type().ordinal() >= RUData.UNIT_TYPE.HERO_INFANTRY.ordinal() && !isIrregular)
+						heroCurrent[i]++;
+				} else if (dets[i][j] instanceof Formation) {
+					Formation formation = (Formation) dets[i][j];
+					//use some points
+					pointsCurrent += Integer.parseInt(formation.pts());
 				}
-				//increase maximums for horde or legion
-				if ((unit.sizeName().toLowerCase().equals(RUData.UNIT_SIZE.HORDE.toString()) ||
-					unit.sizeName().toLowerCase().equals(RUData.UNIT_SIZE.LEGION.toString())) && !isIrregular) {
-						troopMax[i] += 4;
-						warEngMax[i] += 1;
-						monMax[i] += 1;
-						heroMax[i] += 1;
-				}
-				//use troop slot
-				if (unit.sizeName().toLowerCase().equals(RUData.UNIT_SIZE.TROOP.toString()) || isIrregular)
-					troopCurrent[i]++;
-				//use war engine slot
-				if (unit.type() == RUData.UNIT_TYPE.WAR_ENGINE && !isIrregular)
-					warEngCurrent[i]++;
-				//use monster slot
-				if (unit.type() == RUData.UNIT_TYPE.MONSTER && !isIrregular)
-					monCurrent[i]++;
-				//use hero slot (keep an eye on this, using ordinal() is dangerous)
-				if (unit.type().ordinal() >= RUData.UNIT_TYPE.HERO_INFANTRY.ordinal() && !isIrregular)
-					heroCurrent[i]++;
 
 			}
 			//fill wild slots using the other slots
@@ -122,14 +128,13 @@ public class ArmyRequirements {
 
 	}
 
-	private void calculateAlliedPercent(SelectedUnit[][] dets) {
+	private void calculateAlliedPercent(ArmyElement[][] dets) {
 		if (dets.length > 1) {
 			double alliedPoints = 0.0;
 			for (int i = 1; i < dets.length; i++) {
 				for (int j = 0; j < dets[i].length; j++) {
-					SelectedUnit unit = dets[i][j];
 					//use allied percentage
-					alliedPoints += Double.parseDouble(unit.pts());
+					alliedPoints += Double.parseDouble(dets[i][j].pts());
 				}
 			}
 			alliedPercentCurrent = (alliedPoints/((double) pointsMax))*100.0;
@@ -138,14 +143,13 @@ public class ArmyRequirements {
 		}
 	}
 
-	private void calculateAlliedPoints(SelectedUnit[][] dets) {
+	private void calculateAlliedPoints(ArmyElement[][] dets) {
 		if (dets.length > 1) {
 			int alliedPoints = 0;
 			for (int i = 1; i < dets.length; i++) {
 				for (int j = 0; j < dets[i].length; j++) {
-					SelectedUnit unit = dets[i][j];
 					//use allied percentage
-					alliedPoints += Integer.parseInt(unit.pts());
+					alliedPoints += Integer.parseInt(dets[i][j].pts());
 				}
 			}
 			alliedPointsCurrent = alliedPoints;

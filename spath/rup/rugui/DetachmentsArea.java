@@ -40,26 +40,26 @@ public class DetachmentsArea extends JPanel implements TreeSelectionListener {
 	private void buildTree(DefaultMutableTreeNode root) {
 		DefaultMutableTreeNode detachment = null;
 		DefaultMutableTreeNode unit = null;
-		SelectedUnit[][] units = this.ui.army().detachments();
+		ArmyElement[][] units = this.ui.army().detachments();
 		Force[] forces = this.ui.army().forces();
 		for (int d = 0; d < units.length; d++) {
-			//build detchment node
+			//build detachment node
 			detachment = new DefaultMutableTreeNode(RUData.html(forces[d].name(), RUData.titleSize));
 			for (int u = 0; u < units[d].length; u++) {
 				//build unit node
-			unit = new DefaultMutableTreeNode(new unitEntry(units[d][u]));
+			unit = new DefaultMutableTreeNode(new armyElementEntry(units[d][u]));
 			detachment.add(unit);
 			}
 			root.add(detachment);
 		}
 	}
 
-	//add SelectedUnit to tree
-	public void addUnit(SelectedUnit unit) {
+	//add ArmyElement to tree
+	public void addUnit(ArmyElement unit) {
 		//find detachment index
 		boolean foundDet = false;
 		int detIndex = -1;
-		SelectedUnit[][] units = this.ui.army().detachments();
+		ArmyElement[][] units = this.ui.army().detachments();
 		for (int d = 0; d < units.length; d++) {
 			if (units[d].length > 0) {
 				foundDet = unit.force() == units[d][0].force();
@@ -73,7 +73,7 @@ public class DetachmentsArea extends JPanel implements TreeSelectionListener {
 
 		DefaultTreeModel model = (DefaultTreeModel) this.tree.getModel();
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-		DefaultMutableTreeNode unitNode = new DefaultMutableTreeNode(new unitEntry(unit));
+		DefaultMutableTreeNode unitNode = new DefaultMutableTreeNode(new armyElementEntry(unit));
 		if (!foundDet) {
 			//build detachment node and add unit to that
 			DefaultMutableTreeNode detachmentNode = new DefaultMutableTreeNode(RUData.html(unit.force().name(), RUData.titleSize));
@@ -94,10 +94,10 @@ public class DetachmentsArea extends JPanel implements TreeSelectionListener {
 	}
 
 	//removes unit from the tree
-	public void removeUnit(SelectedUnit unit) {
+	public void removeUnit(ArmyElement unit) {
 
 		//find correct indices
-		SelectedUnit[][] units = this.ui.army().detachments();
+		ArmyElement[][] units = this.ui.army().detachments();
 		int detIndex = -1;
 		int unitIndex = -1;
 		for (int d = 0; d < units.length; d++) {
@@ -149,8 +149,17 @@ public class DetachmentsArea extends JPanel implements TreeSelectionListener {
 		DefaultMutableTreeNode det = null;//selected detachment
 		Object obj = node.getUserObject();
 		if (node.isLeaf()) {
-			unitEntry ue = (unitEntry) (obj);
-			ui.setSelectedUnit(ue.unit);
+			if (obj instanceof armyElementEntry) {
+				armyElementEntry ue = (armyElementEntry) (obj);
+				if (ue.armyElement instanceof SelectedUnit) {
+					SelectedUnit su = (SelectedUnit) ue.armyElement;
+					ui.setSelectedUnit(su);
+				} else if (ue.armyElement instanceof Formation) {
+					Formation f = (Formation) ue.armyElement;
+					ui.setSelectedFormation(f);
+				}
+			}
+
 			this.ui.ARButton().setRem();//switch add/remove btn to remove
 
 			det = (DefaultMutableTreeNode) node.getParent();
@@ -178,14 +187,16 @@ public class DetachmentsArea extends JPanel implements TreeSelectionListener {
 		tree.makeVisible(tpath);
 	}
 
-    //define class that holds SelectedUnit object w/ formatted toString
-    class unitEntry {
-		public SelectedUnit unit;
-		public unitEntry(SelectedUnit u) {
-			this.unit = u;
+    //define class that holds ArmyElement object w/ formatted toString
+    class armyElementEntry {
+		public ArmyElement armyElement;
+		public armyElementEntry(ArmyElement u) {
+			this.armyElement = u;
 		}
 		public String toString() {
-			return RUData.html(unit.name());
+			return RUData.html(armyElement.name());
 		}
 	}
+
+
 }

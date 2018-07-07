@@ -189,11 +189,13 @@ public class UnitOptionsArea extends JPanel implements ActionListener{
 	public void buildArtefactsTaken() {
 		this.artefactsTaken = new DynamicArray(new Artifact[0]);
 
-		SelectedUnit[][] dets = this.ui.army().detachments();
+		ArmyElement[][] dets = this.ui.army().detachments();
 		for (int d = 0; d < dets.length; d++) {
 			for (int u = 0; u < dets[d].length; u++) {
-				if (dets[d][u].artefact() != null) {
-					this.artefactsTaken.add(dets[d][u].artefact());
+				if (!(dets[d][u] instanceof SelectedUnit)) return;
+				SelectedUnit unit = (SelectedUnit) dets[d][u];
+				if (unit.artefact() != null) {
+					this.artefactsTaken.add(unit.artefact());
 				}
 			}
 		}

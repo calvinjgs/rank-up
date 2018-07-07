@@ -34,6 +34,19 @@ public class RUData {//are you?
 	public static final String beginSpecialName = "<specialname>";
 	public static final String beginSpecialRef = "<specialref>";
 	public static final String beginDependencies = "<deps>";
+	public static final String beginUnitUpdate = "<unitupdate>";
+	public static final String beginAddSpecial = "<addspecial>";
+	public static final String beginRemoveSpecial = "<removespecial>";
+	public static final String beginAddSize = "<addsize>";
+	public static final String beginEditSize = "<editsize>";
+	public static final String beginRemoveSize = "<removesize>";
+	public static final String beginAddOption = "<addoption>";
+	public static final String beginEditOption = "<editoption>";
+	public static final String beginRemoveOption = "<removeoption>";
+	public static final String beginUpdateForce = "<updateforce>";
+	public static final String beginNewUnitName = "<newunitname>";
+	public static final String beginArmyElement = "<armyelement>";
+
 
 	public static final String endForce = "</force>";
 	public static final String endUnit = "</unit>";
@@ -51,6 +64,19 @@ public class RUData {//are you?
 	public static final String endSpecialName = "</specialname>";
 	public static final String endSpecialRef = "</specialref>";
 	public static final String endDependencies = "</deps>";
+	public static final String endUnitUpdate = "</unitupdate>";
+	public static final String endAddSpecial = "</addspecial>";
+	public static final String endRemoveSpecial = "</removespecial>";
+	public static final String endAddSize = "</addsize>";
+	public static final String endEditSize = "</editsize>";
+	public static final String endRemoveSize = "</removesize>";
+	public static final String endAddOption = "</addoption>";
+	public static final String endEditOption = "</editoption>";
+	public static final String endRemoveOption = "</removeoption>";
+	public static final String endUpdateForce = "</updateforce>";
+	public static final String endNewUnitName = "</newunitname>";
+	public static final String endArmyElement = "</armyelement>";
+
 
 	public static final String beginSp = "<sp>";
 	public static final String endSp = "</sp>";
@@ -105,10 +131,8 @@ public class RUData {//are you?
 	public static int textSize = 9;
 	public static int titleSize = textSize + 3;
 
-	//lists
+	//package stuff
 	public static RUPackage WORKINGPACKAGE;
-
-
 
 
 	//unit related stuff

@@ -60,6 +60,7 @@ public class SelectPackagesDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == this.confirmButton) {
 			//clear out stuff that depends on the old packages
+			//TODO check to see if army has same packages
 			this.ui.optionsArea().clear();
 			SelectedUnit su = null;
 			this.ui.setSelectedUnit(su);

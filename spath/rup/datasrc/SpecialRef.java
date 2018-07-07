@@ -16,6 +16,14 @@ public class SpecialRef {
 		this("","");
 	}
 
+	public SpecialRef clone() {
+		SpecialRef clone = new SpecialRef();
+		clone.setPkgName(new String(this.pkgName()));
+		clone.setSpecName(new String(this.specName()));
+		clone.setN(new String(this.n()));
+		clone.setSpecial(this.special());
+		return clone;
+	}
 
 	public String toString() {
 		String s = this.specName;

@@ -91,7 +91,7 @@ public class OptionsArea extends JPanel implements ActionListener {
 	public void clear() {
 		System.out.println("***");
 		System.out.println("begin clear");
-		SelectedUnit[][] dets = this.ui.army().detachments();
+		ArmyElement[][] dets = this.ui.army().detachments();
 		if (dets.length > 0) {//army is not empty
 			this.ui.detachmentsArea().selectNode(0, 0);
 			System.out.println("dets.length = " + dets.length);
@@ -125,21 +125,56 @@ public class OptionsArea extends JPanel implements ActionListener {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fc.getSelectedFile();
 			String filename = fc.getCurrentDirectory().getAbsolutePath() + RWFile.fs + file.getName();
-			SelectedUnit[][] dets = SaveLoad.load(filename, RUData.WORKINGPACKAGE.forces(), this.ui.armyReqs());
-			System.out.println("clearing");
-			clear();//clear out the current army list.
-			//add in units one-by-one
-			for (int d = 0; d < dets.length; d++) {
-				for (int u = 0; u < dets[d].length; u++) {
-					this.ui.setSelectedUnit(dets[d][u]);
-					System.out.println("selected: " + this.ui.selectedUnit().name());
-					this.ui.ARButton().setAdd();
-					System.out.println("ARButton action performed");
-					this.ui.ARButton().actionPerformed(null);
+
+			String[] armyPackages = SaveLoad.loadUsedPackages(filename);
+			DynamicArray<String> rupsNotFound = new DynamicArray(new String[0]);
+			for (int i = 0; i < armyPackages.length; i++) {
+				boolean pkgFound = false;
+				for (int j = 0; j < this.ui.selectedPackages().length; j++) {
+					if (this.ui.selectedPackages(j).name().equals(armyPackages[i])) {
+						pkgFound = true; break;
+					}
+				}
+				if (!pkgFound) {
+					rupsNotFound.add(armyPackages[i]);
 				}
 			}
+			if (rupsNotFound.size() > 0) {
+				//TODO show package not found dialogue box.
+				return;
+			}
+			loadActually(filename);
+
 		}
-		this.selectedFileName = fc.getSelectedFile().getName();
+	}
+
+
+	//the actually loading part of the load method. So it can be
+	//called by a dialogue box as well.
+	public void loadActually(String filename) {
+		ArmyElement[][] dets = SaveLoad.load(filename, RUData.WORKINGPACKAGE.forces(), this.ui.armyReqs());
+
+		System.out.println("clearing");
+		clear();//clear out the current army list.
+		//add in units one-by-one
+		for (int d = 0; d < dets.length; d++) {
+			for (int u = 0; u < dets[d].length; u++) {
+				if ((dets[d][u] instanceof SelectedUnit)) {
+					SelectedUnit unit = (SelectedUnit) dets[d][u];
+					this.ui.setSelectedUnit(unit);
+					System.out.println("selected: " + this.ui.selectedUnit().name());
+				} else if (dets[d][u] instanceof Formation) {
+					Formation formation = (Formation) dets[d][u];
+					this.ui.setSelectedFormation(formation);
+				}
+
+				this.ui.ARButton().setAdd();
+				System.out.println("ARButton action performed");
+				this.ui.ARButton().actionPerformed(null);
+			}
+		}
+
+		if (fc.getSelectedFile() != null) this.selectedFileName = fc.getSelectedFile().getName();
 		System.out.println("updating reqs and displays");
 		//update army requirements
 		this.ui.armyReqs().buildRequirements(this.ui.army().detachments());
@@ -167,10 +202,10 @@ public class OptionsArea extends JPanel implements ActionListener {
 				if (!filename.endsWith(".army")) {
 					filename += ".army";
 				}
-				SaveLoad.save(filename, this.ui.army().detachments(), this.ui.armyReqs());
+				SaveLoad.save(filename, this.ui.army().detachments(), this.ui.armyReqs(), this.ui.selectedPackages());
 			}
 		}
-		this.selectedFileName = fc.getSelectedFile().getName();
+		if (fc.getSelectedFile() != null) this.selectedFileName = fc.getSelectedFile().getName();
 
 	}
 
@@ -191,13 +226,13 @@ public class OptionsArea extends JPanel implements ActionListener {
 			File file = fc.getSelectedFile();
 			if (this.ui.army().detachments().length > 0) {
 				String filename = fc.getCurrentDirectory().getAbsolutePath() + RWFile.fs + file.getName();
-				if (!filename.endsWith(".htm") || !filename.endsWith(".html")) {
+				if (!filename.endsWith(".htm") && !filename.endsWith(".html")) {
 					filename += ".htm";
 				}
 				ExportToHTML.exportArmy(this.ui.army().detachments(), this.ui.armyReqs(), filename);
 			}
 		}
-		this.selectedFileName = fc.getSelectedFile().getName();
+		if (fc.getSelectedFile() != null) this.selectedFileName = fc.getSelectedFile().getName();
 
 	}
 
@@ -229,7 +264,7 @@ public class OptionsArea extends JPanel implements ActionListener {
 				ExportToText.exportArmy(this.ui.army().detachments(), this.ui.armyReqs(), filename);
 			}
 		}
-		this.selectedFileName = fc.getSelectedFile().getName();
+		if (fc.getSelectedFile() != null) this.selectedFileName = fc.getSelectedFile().getName();
 
 
 	}

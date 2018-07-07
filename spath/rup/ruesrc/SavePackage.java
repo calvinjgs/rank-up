@@ -28,6 +28,13 @@ public class SavePackage {
 			Artifact artifact = rupackage.artifacts(i);
 			s += RUData.beginArtifact + artifactString(artifact) + RUData.endArtifact;
 		}
+		//save unit updates
+		for (int i = 0; i < rupackage.unitUpdates().length; i++) {
+			UnitUpdate unitUpdate = rupackage.unitUpdates(i);
+			System.out.println("saving unit update");
+			s += RUData.beginUnitUpdate + unitUpdateString(unitUpdate) + RUData.endUnitUpdate;
+		}
+		//TODO formation, special and artefact updates
 
 		return s;
 	}
@@ -179,6 +186,60 @@ public class SavePackage {
 		s += RUData.beginDesc + artifact.description() + RUData.endDesc;
 		//save points
 		s += RUData.beginPts + artifact.pts() + RUData.endPts;
+
+		return s;
+	}
+
+	public static String unitUpdateString(UnitUpdate unitUpdate) {
+		String s = "";
+		//save names
+		s += RUData.beginPackageName + unitUpdate.pkgName() + RUData.endPackageName;
+		s += RUData.beginUpdateForce + unitUpdate.forceName() + RUData.endUpdateForce;
+		s += RUData.beginUnit + unitUpdate.unitName() + RUData.endUnit;
+		s += RUData.beginNewUnitName + unitUpdate.newUnitName() + RUData.endNewUnitName;
+
+		//save addSizes
+		for (int i = 0; i < unitUpdate.addSizes().length; i++) {
+			UnitSize size = unitUpdate.addSizes(i);
+			s += RUData.beginAddSize + sizeString(size) + RUData.endAddSize;
+		}
+		//save editSizes
+		for (int i = 0; i < unitUpdate.editSizes().length; i++) {
+			UnitSize size = unitUpdate.editSizes(i);
+			s += RUData.beginEditSize + sizeString(size) + RUData.endEditSize;
+		}
+		//save removeSizes
+		for (int i = 0; i < unitUpdate.removeSizes().length; i++) {
+			UnitSize size = unitUpdate.removeSizes(i);
+			s += RUData.beginRemoveSize + sizeString(size) + RUData.endRemoveSize;
+		}
+
+		//save addSpecials
+		for (int i = 0; i < unitUpdate.addSpecials().length; i++) {
+			SpecialRef special = unitUpdate.addSpecials(i);
+			s += RUData.beginAddSpecial + specialRefString(special) + RUData.endAddSpecial;
+		}
+		//save removeSpecials
+		for (int i = 0; i < unitUpdate.removeSpecials().length; i++) {
+			SpecialRef special = unitUpdate.removeSpecials(i);
+			s += RUData.beginRemoveSpecial + specialRefString(special) + RUData.endRemoveSpecial;
+		}
+
+		//save addOptions
+		for (int i = 0; i < unitUpdate.addOptions().length; i++) {
+			UnitOption option = unitUpdate.addOptions(i);
+			s += RUData.beginAddOption + optionString(option) + RUData.endAddOption;
+		}
+		//save editOptions
+		for (int i = 0; i < unitUpdate.editOptions().length; i++) {
+			UnitOption option = unitUpdate.editOptions(i);
+			s += RUData.beginEditOption + optionString(option) + RUData.endEditOption;
+		}
+		//save removeOptions
+		for (int i = 0; i < unitUpdate.removeOptions().length; i++) {
+			UnitOption option = unitUpdate.removeOptions(i);
+			s += RUData.beginRemoveOption + optionString(option) + RUData.endRemoveOption;
+		}
 
 		return s;
 	}

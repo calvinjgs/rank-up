@@ -13,6 +13,20 @@ public class UnitSize {
 		sp = me = ra = de = att = neW = neR = pts = "";
 	}
 
+	public UnitSize clone() {
+		UnitSize clone = new UnitSize();
+		clone.setName(this.name());
+		clone.setSp(this.sp());
+		clone.setMe(this.me());
+		clone.setRa(this.ra());
+		clone.setDe(this.de());
+		clone.setAtt(this.att());
+		clone.setNeW(this.neW());
+		clone.setNeR(this.neR());
+		clone.setPts(this.pts());
+		return clone;
+	}
+
 	public String toString() {
 		return this.name.toString();
 	}

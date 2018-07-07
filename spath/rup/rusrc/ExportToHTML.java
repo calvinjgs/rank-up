@@ -10,13 +10,13 @@ public class ExportToHTML {
 
 	public static boolean includeSpecialDescriptions;
 
-	public static void exportArmy(SelectedUnit[][] army, ArmyRequirements armyReqs) {
+	public static void exportArmy(ArmyElement[][] army, ArmyRequirements armyReqs) {
 		String fn = army[0][0].force().name() + " " + armyReqs.pointsMax();
 		fn = RUData.ARMY_LIST_PATH + RWFile.fs + fn + ".htm";
 		exportArmy(army, armyReqs, fn);
 	}
 
-	public static void exportArmy(SelectedUnit[][] army, ArmyRequirements armyReqs, String filename) {
+	public static void exportArmy(ArmyElement[][] army, ArmyRequirements armyReqs, String filename) {
 		String a = "<html>";
 		//head
 		a += "<head>";
@@ -58,7 +58,13 @@ public class ExportToHTML {
 		//unit stat tables
 		for (int i = 0; i < army.length; i++) {
 			for (int j = 0; j < army[i].length; j++) {
-				a += unitTable(army[i][j]);
+				if (army[i][j] instanceof SelectedUnit) {
+					SelectedUnit su = (SelectedUnit) army[i][j];
+					a += unitTable(su);
+				} else if (army[i][j] instanceof Formation) {
+					Formation f = (Formation) army[i][j];
+					a += formationTable(f);
+				}
 				if (!((i == army.length - 1) && (j == army[i].length - 1))) a += "<br><br>" + RWFile.nl;
 			}
 		}
@@ -117,6 +123,26 @@ public class ExportToHTML {
 		return s;
 	}
 
+	public static String formationTable(Formation f) {
+		String s = "<table cellSpacing=\"0\" cellPadding=\"2\" width=\"100%\" border=\"1\" style=\"page-break-after: avoid; page-break-before: auto;\">";
+		s += "<tr>";
+		s += "<th class=\"namehead\" colspan=\"1\">" + f.name() + "</td>";
+		s += "<th class=\"namehead\" colspan=\"1\">" + "Formation" + "</td>";
+		s += "</tr>";
+		s += "<tr>";
+		s += "<td colspan=\"1\" rowspan=\"2\">";
+		s += f.description();
+		s += "</td>";
+		s += "<th class=\"stathead\">Pts</td>";
+		s += "</tr>";
+		s += "<tr>";
+		s += "<th class=\"stat\">" + RUData.displayStat(f.pts()) + "</td>";
+		s += "</tr>";
+		s += "</table>";
+		return s;
+
+	}
+
 	public static String capitalize(String s) {
 		String[] sarr = s.split("\\b");
 		s = "";
@@ -129,15 +155,17 @@ public class ExportToHTML {
 
 	}
 
-	public static String specialDescriptions(SelectedUnit[][] army) {
+	public static String specialDescriptions(ArmyElement[][] army) {
 		String s = "";
 
 		//gather all specials used in this army.
 		DynamicArray<Special> includedSpecs = new DynamicArray(new Special[0]);
 		for (int i = 0; i < army.length; i++) {
 			for (int j = 0; j < army[i].length; j++) {
-				for (int k = 0; k < army[i][j].specials().length; k++) {
-					Special spec = army[i][j].specials(k).special(RUData.WORKINGPACKAGE.specials());
+				if (!(army[i][j] instanceof SelectedUnit)) continue;
+				SelectedUnit unit = (SelectedUnit) army[i][j];
+				for (int k = 0; k < unit.specials().length; k++) {
+					Special spec = unit.specials(k).special(RUData.WORKINGPACKAGE.specials());
 					boolean specIn = false;
 					for (int m = 0; m < includedSpecs.size(); m++) {
 						if (spec.equals(includedSpecs.storage(m))) specIn = true;

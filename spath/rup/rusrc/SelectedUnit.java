@@ -5,7 +5,7 @@ import rup.datasrc.*;
 
 import java.util.*;
 //Selected unit for an army list. Includes all options and modifiers.
-public class SelectedUnit {
+public class SelectedUnit extends ArmyElement {
 
 	private Force force;
 	private Unit unit;

@@ -116,6 +116,21 @@ public class Compile {
 			artifacts.trim();
 			pkg.setArtifacts(artifacts.storage());
 
+			//get all unit updates
+			scnr = new Scanner(pkgString);
+			String unitUpdateString = nextArg(scnr, RUData.beginUnitUpdate, RUData.endUnitUpdate);
+			DynamicArray<UnitUpdate> unitUpdates = new DynamicArray(new UnitUpdate[0]);
+			while (unitUpdateString != null) {
+				UnitUpdate unitUpdate = compileUnitUpdate(unitUpdateString);
+				unitUpdates.add(unitUpdate);
+				unitUpdateString = nextArg(scnr, RUData.beginUnitUpdate, RUData.endUnitUpdate);
+			}
+			unitUpdates.trim();
+			pkg.setUnitUpdates(unitUpdates.storage());
+
+
+			//TODO: get all special and artefact updates
+
 			return pkg;
 		}
 		return null;
@@ -153,6 +168,7 @@ public class Compile {
 		DynamicArray<Formation> formations = new DynamicArray(new Formation[0]);
 		while (formationString != null) {
 			Formation formation = compileFormation(formationString);
+			formation.setForce(force);
 			formations.add(formation);
 			formationString = nextArg(scnr, RUData.beginFormation, RUData.endFormation);
 		}
@@ -371,6 +387,120 @@ public class Compile {
 
 		return artifact;
 	}
+
+	public static UnitUpdate compileUnitUpdate(String unitUpdateString) {
+		UnitUpdate unitUpdate = new UnitUpdate();
+		//get package, force, and unit names
+		Scanner scnr = new Scanner(unitUpdateString);
+		String name = nextArg(scnr, RUData.beginPackageName, RUData.endPackageName);
+		unitUpdate.setPkgName(name);
+		scnr = new Scanner(unitUpdateString);
+		name = nextArg(scnr, RUData.beginUpdateForce, RUData.endUpdateForce);
+		unitUpdate.setForceName(name);
+		scnr = new Scanner(unitUpdateString);
+		name = nextArg(scnr, RUData.beginUnit, RUData.endUnit);
+		unitUpdate.setUnitName(name);
+		scnr = new Scanner(unitUpdateString);
+		name = nextArg(scnr, RUData.beginNewUnitName, RUData.endNewUnitName);
+		unitUpdate.setNewUnitName(name);
+
+
+		//get addSizes
+		scnr = new Scanner(unitUpdateString);
+		String sizeString = nextArg(scnr, RUData.beginAddSize, RUData.endAddSize);
+		DynamicArray<UnitSize> sizes = new DynamicArray(new UnitSize[0]);
+		while (sizeString != null) {
+			UnitSize size = compileSize(sizeString);
+			sizes.add(size);
+			sizeString = nextArg(scnr, RUData.beginAddSize, RUData.endAddSize);
+		}
+		sizes.trim();
+		unitUpdate.setAddSizes(sizes.storage());
+		//get editSizes
+		scnr = new Scanner(unitUpdateString);
+		sizeString = nextArg(scnr, RUData.beginEditSize, RUData.endEditSize);
+		sizes = new DynamicArray(new UnitSize[0]);
+		while (sizeString != null) {
+			UnitSize size = compileSize(sizeString);
+			sizes.add(size);
+			sizeString = nextArg(scnr, RUData.beginEditSize, RUData.endEditSize);
+		}
+		sizes.trim();
+		unitUpdate.setEditSizes(sizes.storage());
+		//get removeSizes
+		scnr = new Scanner(unitUpdateString);
+		sizeString = nextArg(scnr, RUData.beginRemoveSize, RUData.endRemoveSize);
+		sizes = new DynamicArray(new UnitSize[0]);
+		while (sizeString != null) {
+			UnitSize size = compileSize(sizeString);
+			sizes.add(size);
+			sizeString = nextArg(scnr, RUData.beginRemoveSize, RUData.endRemoveSize);
+		}
+		sizes.trim();
+		unitUpdate.setRemoveSizes(sizes.storage());
+
+		//get addSpecials
+		scnr = new Scanner(unitUpdateString);
+		String specialString = nextArg(scnr, RUData.beginAddSpecial, RUData.endAddSpecial);
+		DynamicArray<SpecialRef> specials = new DynamicArray(new SpecialRef[0]);
+		while (specialString != null) {
+			SpecialRef special = compileSpecialRef(specialString);
+			specials.add(special);
+			specialString = nextArg(scnr, RUData.beginAddSpecial, RUData.endAddSpecial);
+		}
+		specials.trim();
+		unitUpdate.setAddSpecials(specials.storage());
+		//get removeSpecials
+		scnr = new Scanner(unitUpdateString);
+		specialString = nextArg(scnr, RUData.beginRemoveSpecial, RUData.endRemoveSpecial);
+		specials = new DynamicArray(new SpecialRef[0]);
+		while (specialString != null) {
+			SpecialRef special = compileSpecialRef(specialString);
+			specials.add(special);
+			specialString = nextArg(scnr, RUData.beginRemoveSpecial, RUData.endRemoveSpecial);
+		}
+		specials.trim();
+		unitUpdate.setRemoveSpecials(specials.storage());
+
+		//get addOptions
+		scnr = new Scanner(unitUpdateString);
+		String optionString = nextArg(scnr, RUData.beginAddOption, RUData.endAddOption);
+		DynamicArray<UnitOption> options = new DynamicArray(new UnitOption[0]);
+		while (optionString != null) {
+			UnitOption option = compileOption(optionString);
+			options.add(option);
+			optionString = nextArg(scnr, RUData.beginAddOption, RUData.endAddOption);
+		}
+		options.trim();
+		unitUpdate.setAddOptions(options.storage());
+		//get editOptions
+		scnr = new Scanner(unitUpdateString);
+		optionString = nextArg(scnr, RUData.beginEditOption, RUData.endEditOption);
+		options = new DynamicArray(new UnitOption[0]);
+		while (optionString != null) {
+			UnitOption option = compileOption(optionString);
+			options.add(option);
+			optionString = nextArg(scnr, RUData.beginEditOption, RUData.endEditOption);
+		}
+		options.trim();
+		unitUpdate.setEditOptions(options.storage());
+		//get removeOptions
+		scnr = new Scanner(unitUpdateString);
+		optionString = nextArg(scnr, RUData.beginRemoveOption, RUData.endRemoveOption);
+		options = new DynamicArray(new UnitOption[0]);
+		while (optionString != null) {
+			UnitOption option = compileOption(optionString);
+			options.add(option);
+			optionString = nextArg(scnr, RUData.beginRemoveOption, RUData.endRemoveOption);
+		}
+		options.trim();
+		unitUpdate.setRemoveOptions(options.storage());
+
+		return unitUpdate;
+	}
+
+
+
 
 	//scans to begArg, and returns the sub string between first occurance of
 	//begArg and endArg.
