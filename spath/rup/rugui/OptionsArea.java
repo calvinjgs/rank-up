@@ -115,7 +115,7 @@ public class OptionsArea extends JPanel implements ActionListener {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(".army files", "army");
 		fc.setFileFilter(filter);
 
-		if (this.selectedFileName != null) {
+		if (this.selectedFileName != null && this.selectedFileName.lastIndexOf(".") != -1) {
 			String fname = this.selectedFileName.substring(0, this.selectedFileName.lastIndexOf(".")) + ".army";
 			fc.setSelectedFile(new File(fname));
 		}
@@ -128,6 +128,7 @@ public class OptionsArea extends JPanel implements ActionListener {
 
 			String[] armyPackages = SaveLoad.loadUsedPackages(filename);
 			DynamicArray<String> rupsNotFound = new DynamicArray(new String[0]);
+			System.out.println("rups not found in OptionsArea");
 			for (int i = 0; i < armyPackages.length; i++) {
 				boolean pkgFound = false;
 				for (int j = 0; j < this.ui.selectedPackages().length; j++) {
@@ -136,11 +137,15 @@ public class OptionsArea extends JPanel implements ActionListener {
 					}
 				}
 				if (!pkgFound) {
+					System.out.println(armyPackages[i]);
 					rupsNotFound.add(armyPackages[i]);
 				}
 			}
 			if (rupsNotFound.size() > 0) {
-				//TODO show package not found dialogue box.
+				//spawn an ExportOptionsDialog window
+				rupsNotFound.trim();
+				PackageNotFoundDialog pnfd = new PackageNotFoundDialog(this.ui, filename, armyPackages, rupsNotFound.storage());
+				pnfd.setVisible(true);
 				return;
 			}
 			loadActually(filename);
@@ -188,7 +193,7 @@ public class OptionsArea extends JPanel implements ActionListener {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(".army files", "army");
 		fc.setFileFilter(filter);
 
-		if (this.selectedFileName != null) {
+		if (this.selectedFileName != null && this.selectedFileName.lastIndexOf(".") != -1) {
 			String fname = this.selectedFileName.substring(0, this.selectedFileName.lastIndexOf(".")) + ".army";
 			fc.setSelectedFile(new File(fname));
 		}
@@ -215,7 +220,7 @@ public class OptionsArea extends JPanel implements ActionListener {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("HTML files", "htm", "html");
 		fc.setFileFilter(filter);
 
-		if (this.selectedFileName != null) {
+		if (this.selectedFileName != null && this.selectedFileName.lastIndexOf(".") != -1) {
 			String fname = this.selectedFileName.substring(0, this.selectedFileName.lastIndexOf(".")) + ".htm";
 			fc.setSelectedFile(new File(fname));
 		}

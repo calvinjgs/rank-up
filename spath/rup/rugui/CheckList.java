@@ -25,7 +25,7 @@ public class CheckList<T> extends JPanel implements ItemListener {
 		JPanel pan = new JPanel();
 		pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS));
 		for (int i = 0; i < items.length; i++) {
-			this.checkBoxList[i] = new JCheckBox(this.itemList[i].toString());
+			this.checkBoxList[i] = new JCheckBox(RUData.html(this.itemList[i].toString()));
 			pan.add(this.checkBoxList[i]);
 			this.checkBoxList[i].addItemListener(this);
 			this.isChecked[i] = false;

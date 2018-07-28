@@ -48,6 +48,7 @@ public class ExportToHTML {
 		a += "\ttext-align: center;" + RWFile.nl;
 		a += "\tfont-weight: bold;" + RWFile.nl;
 		a += "}" + RWFile.nl;
+
 		a += "</style>" + RWFile.nl;
 		a += "</head>" + RWFile.nl;
 		//body
@@ -82,7 +83,7 @@ public class ExportToHTML {
 
 
 	public static String unitTable(SelectedUnit su) {
-		String s = "<table cellSpacing=\"0\" cellPadding=\"2\" width=\"100%\" border=\"1\" style=\"page-break-after: avoid; page-break-before: auto;\">";
+		String s = "<table cellSpacing=\"0\" cellPadding=\"2\" width=\"100%\" border=\"1\" style=\"display: inline-table; page-break-after: avoid; page-break-before: auto;\">";
 		s += "<tr>";
 		s += "<th class=\"namehead\" colspan=\"3\">" + su.name() + "</td>";
 		s += "<th class=\"namehead\" colspan=\"3\">" + capitalize(su.type().toString()) + "</td>";
@@ -124,7 +125,7 @@ public class ExportToHTML {
 	}
 
 	public static String formationTable(Formation f) {
-		String s = "<table cellSpacing=\"0\" cellPadding=\"2\" width=\"100%\" border=\"1\" style=\"page-break-after: avoid; page-break-before: auto;\">";
+		String s = "<table cellSpacing=\"0\" cellPadding=\"2\" width=\"100%\" border=\"1\" style=\"display: inline-table; page-break-after: avoid; page-break-before: auto;\">";
 		s += "<tr>";
 		s += "<th class=\"namehead\" colspan=\"1\">" + f.name() + "</td>";
 		s += "<th class=\"namehead\" colspan=\"1\">" + "Formation" + "</td>";
@@ -188,6 +189,11 @@ public class ExportToHTML {
 
 
 		return s;
+	}
+
+	public static String pageBreak() {
+		return "";
+
 	}
 
 }

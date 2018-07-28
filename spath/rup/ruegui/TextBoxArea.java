@@ -19,6 +19,7 @@ public class TextBoxArea extends JPanel {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.name = n;
 		this.area = new JTextArea();
+		this.area.setFont(new Font(null, Font.PLAIN, RUData.titleSize));
 		JLabel label = new JLabel(RUData.html(n));
 		this.add(label);
 		label.setHorizontalAlignment(SwingConstants.CENTER);

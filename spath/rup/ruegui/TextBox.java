@@ -19,10 +19,12 @@ public class TextBox extends JPanel {
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.name = n;
 		this.field = new JTextField();
+		this.field.setFont(new Font(null, Font.PLAIN, RUData.titleSize));
 		JLabel label = new JLabel(RUData.html(n));
 		this.add(label);
 		label.setHorizontalAlignment(SwingConstants.TRAILING);
 		this.setColumns(10);
+
 		this.add(this.field);
 	}
 

@@ -23,7 +23,6 @@ public class RUPackagesMenu extends EditorPanel implements ActionListener {
 		String[] packagenames = ConfigFile.sortedRUPackageNames(Compile.getRUPackageNames());
 
 
-
 		//list package file names
 		JPanel pan = new JPanel();
 		pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS));
@@ -82,8 +81,16 @@ public class RUPackagesMenu extends EditorPanel implements ActionListener {
 
 	public void panelShown() {
 		System.out.println("RUPAckagesMenu shown");
-		//this.list.clear();
-		//this.list.addItems(Compile.getRUPackageNames());
+		//update package order
+		String pkgnames[] = new String[this.list.length()];
+		for (int i = 0; i < pkgnames.length; i++) {
+			pkgnames[i] = this.list.item(i);
+		}
+		ConfigFile.rupackageList = pkgnames;
+		this.list.clear();
+		String[] packagenames = ConfigFile.sortedRUPackageNames(Compile.getRUPackageNames());
+		this.list.addItems(packagenames);
+
 	}
 
 	public void panelHidden() {
@@ -96,6 +103,7 @@ public class RUPackagesMenu extends EditorPanel implements ActionListener {
 		ConfigFile.RUEditorY = this.frame().getLocation().y;
 		String pkgnames[] = new String[this.list.length()];
 		for (int i = 0; i < pkgnames.length; i++) {
+			System.out.println(this.list.item(i));
 			pkgnames[i] = this.list.item(i);
 		}
 		ConfigFile.rupackageList = pkgnames;

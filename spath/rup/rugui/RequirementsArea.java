@@ -52,6 +52,7 @@ public class RequirementsArea extends JPanel implements ActionListener{
 		pointsFieldArea = new JPanel(new GridLayout(2, 1));
 		pointsFieldArea.add(new JLabel("Set Points:"));
 		pointsField = new JTextField("", 4);
+		this.pointsField.setFont(new Font(null, Font.PLAIN, RUData.titleSize));
 		pointsField.addActionListener(this);
 		pointsFieldArea.add(pointsField);
 		this.add(pointsFieldArea);
