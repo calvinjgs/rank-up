@@ -201,6 +201,7 @@ public class EditFlavourMenu extends EditorPanel implements ActionListener {
 			}
 			if (!isIn) this.addRemoveMenu.addItem(this.unit.specials(i));
 		}
+		this.addRemoveMenu.setPrototypeDisplayValue("XXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 		lpan2.add(this.addRemoveMenu);
 		this.addRemoveMenu.addActionListener(this);
 		this.addRemoveSpecButton = new JButton(RUData.html("Add"));

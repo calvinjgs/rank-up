@@ -36,11 +36,11 @@ public class RUPackagesMenu extends EditorPanel implements ActionListener {
 		this.setBorder(new EmptyBorder(10, 40, 10, 40));//top,left,bottom,right
 
 		//build frame
-		this.frame().setSize(350, 300);
+		//this.frame().setSize(350, 300);
 		if (ConfigFile.RUEditorX < 0) ConfigFile.RUEditorX = 0;
 		if (ConfigFile.RUEditorY < 0) ConfigFile.RUEditorY = 0;
 		this.frame().setLocation(ConfigFile.RUEditorX, ConfigFile.RUEditorY);
-		//this.frame().pack();
+		this.frame().pack();
 		this.frame.setDefaultCloseOperation(this.frame.EXIT_ON_CLOSE);
 
 	}

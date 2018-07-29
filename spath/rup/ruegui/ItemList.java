@@ -99,6 +99,17 @@ public class ItemList<T> extends JPanel implements ListSelectionListener {
 		}
 	}
 
+	//Putting this idea on hiatus; prolly need to control size of jscrollpane.
+	//sets the list's width to 1.5 times the average item length
+	private void packWidth(JScrollPane jsp) {
+		double avgStringLength = 0;
+		for (int i = 0; i < length(); i++) {
+			avgStringLength += item(i).toString().length();
+		}
+		avgStringLength /= length();
+		this.list.setFixedCellWidth((int) (1.5*avgStringLength));
+	}
+
 	//set things
 	public void setSelectedItem(T item) {
 		for (int i = 0; i < length(); i++) {

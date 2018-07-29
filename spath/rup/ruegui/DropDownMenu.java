@@ -23,6 +23,7 @@ public class DropDownMenu<T> extends JPanel {
 		for (int i = 0; i < entries.length; i++)
 			entries[i] = new itemEntry(objs[i]);
 		this.list = new JComboBox(entries);
+
 		this.add(this.list);
 	}
 
@@ -75,7 +76,9 @@ public class DropDownMenu<T> extends JPanel {
 		this.list.removeItemAt(this.list.getSelectedIndex());
 	}
 
-
+	public void setPrototypeDisplayValue(String prototypeText) {
+		this.list.setPrototypeDisplayValue(new itemEntry(prototypeText));
+	}
 	//return things
 	public T selectedItem() {
 		itemEntry ie = this.list.getItemAt(this.list.getSelectedIndex());
