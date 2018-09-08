@@ -47,7 +47,6 @@ public class RUPackagesMenu extends EditorPanel implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if (listButtons.isEditButtonEvent(e)) {
-			System.out.println("edit button clicked");
 			if (this.list.selectedItem() != null) {
 				String filename = Compile.getRUPackageFileName(this.list.selectedItem());
 				RUPackage pkg = Compile.compileRUPackage(filename);
@@ -56,31 +55,24 @@ public class RUPackagesMenu extends EditorPanel implements ActionListener {
 			}
 
 		} else if (listButtons.isAddButtonEvent(e)) {
-			System.out.println("add button clicked");
 			RUPackage newpackage = new RUPackage();
-			newpackage.setName("newPackage");
-			System.out.println("saving newpackage");
+
 			SavePackage.save(newpackage);
-			System.out.println("adding newpackage to list");
 			this.list.addItem(newpackage.name());
 
 		} else if (listButtons.isDeleteButtonEvent(e)) {
-			System.out.println("delete button clicked");
 			Compile.delete(Compile.getRUPackageFileName(this.list.selectedItem()));
 			this.list.removeSelectedItem();
 
 		} else if (listButtons.isUpButtonEvent(e)) {
-			System.out.println("up button clicked");
 			this.list.moveUp();
 		} else if (listButtons.isDownButtonEvent(e)) {
-			System.out.println("down button clicked");
 			this.list.moveDown();
 		}
 	}
 
 
 	public void panelShown() {
-		System.out.println("RUPAckagesMenu shown");
 		//update package order
 		String pkgnames[] = new String[this.list.length()];
 		for (int i = 0; i < pkgnames.length; i++) {
@@ -94,11 +86,9 @@ public class RUPackagesMenu extends EditorPanel implements ActionListener {
 	}
 
 	public void panelHidden() {
-		System.out.println("RUPAckagesMenu hidden");
 	}
 
 	public void windowClosing() {
-		System.out.println("RUPackagesMenu closing");
 		ConfigFile.RUEditorX = this.frame().getLocation().x;
 		ConfigFile.RUEditorY = this.frame().getLocation().y;
 		String pkgnames[] = new String[this.list.length()];

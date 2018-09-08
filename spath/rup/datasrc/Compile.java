@@ -128,8 +128,32 @@ public class Compile {
 			unitUpdates.trim();
 			pkg.setUnitUpdates(unitUpdates.storage());
 
+			//get all special updates
+			scnr = new Scanner(pkgString);
+			String specialUpdateString = nextArg(scnr, RUData.beginSpecialUpdate, RUData.endSpecialUpdate);
+			DynamicArray<SpecialUpdate> specialUpdates = new DynamicArray(new SpecialUpdate[0]);
+			while (specialUpdateString != null) {
+				SpecialUpdate specialUpdate = compileSpecialUpdate(specialUpdateString);
+				specialUpdates.add(specialUpdate);
+				specialUpdateString = nextArg(scnr, RUData.beginSpecialUpdate, RUData.endSpecialUpdate);
+			}
+			specialUpdates.trim();
+			pkg.setSpecialUpdates(specialUpdates.storage());
 
-			//TODO: get all special and artefact updates
+			//get all artifact updates
+			scnr = new Scanner(pkgString);
+			String artifactUpdateString = nextArg(scnr, RUData.beginArtifactUpdate, RUData.endArtifactUpdate);
+			DynamicArray<ArtifactUpdate> artifactUpdates = new DynamicArray(new ArtifactUpdate[0]);
+			while (artifactUpdateString != null) {
+				ArtifactUpdate artifactUpdate = compileArtifactUpdate(artifactUpdateString);
+				artifactUpdates.add(artifactUpdate);
+				artifactUpdateString = nextArg(scnr, RUData.beginArtifactUpdate, RUData.endArtifactUpdate);
+			}
+			artifactUpdates.trim();
+			pkg.setArtifactUpdates(artifactUpdates.storage());
+
+
+			//TODO: get all formation updates
 
 			return pkg;
 		}
@@ -498,6 +522,48 @@ public class Compile {
 
 		return unitUpdate;
 	}
+
+	public static SpecialUpdate compileSpecialUpdate(String specialUpdateString) {
+		SpecialUpdate specialUpdate = new SpecialUpdate();
+
+		Scanner scnr = new Scanner(specialUpdateString);
+		String name = nextArg(scnr, RUData.beginPackageName, RUData.endPackageName);
+		specialUpdate.setPkgName(name);
+		scnr = new Scanner(specialUpdateString);
+		name = nextArg(scnr, RUData.beginName, RUData.endName);
+		specialUpdate.setObjName(name);
+		scnr = new Scanner(specialUpdateString);
+		name = nextArg(scnr, RUData.beginNewSpecialName, RUData.endNewSpecialName);
+		specialUpdate.setNewName(name);
+		scnr = new Scanner(specialUpdateString);
+		String desc = nextArg(scnr, RUData.beginDesc, RUData.endDesc);
+		specialUpdate.setNewDescription(desc);
+
+		return specialUpdate;
+	}
+
+	public static ArtifactUpdate compileArtifactUpdate(String artifactUpdateString) {
+		ArtifactUpdate artifactUpdate = new ArtifactUpdate();
+
+		Scanner scnr = new Scanner(artifactUpdateString);
+		String name = nextArg(scnr, RUData.beginPackageName, RUData.endPackageName);
+		artifactUpdate.setPkgName(name);
+		scnr = new Scanner(artifactUpdateString);
+		name = nextArg(scnr, RUData.beginName, RUData.endName);
+		artifactUpdate.setObjName(name);
+		scnr = new Scanner(artifactUpdateString);
+		name = nextArg(scnr, RUData.beginNewArtifactName, RUData.endNewArtifactName);
+		artifactUpdate.setNewName(name);
+		scnr = new Scanner(artifactUpdateString);
+		String desc = nextArg(scnr, RUData.beginDesc, RUData.endDesc);
+		artifactUpdate.setNewDescription(desc);
+		scnr = new Scanner(artifactUpdateString);
+		String newpts = nextArg(scnr, RUData.beginPts, RUData.endPts);
+		artifactUpdate.setNewPts(newpts);
+
+		return artifactUpdate;
+	}
+
 
 
 

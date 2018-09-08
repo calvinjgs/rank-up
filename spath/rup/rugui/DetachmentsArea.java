@@ -62,7 +62,7 @@ public class DetachmentsArea extends JPanel implements TreeSelectionListener {
 		ArmyElement[][] units = this.ui.army().detachments();
 		for (int d = 0; d < units.length; d++) {
 			if (units[d].length > 0) {
-				foundDet = unit.force() == units[d][0].force();
+				foundDet = unit.force().name().equals(units[d][0].force().name());
 				if (foundDet) {
 					//add unit to existing detachment
 					detIndex = d;

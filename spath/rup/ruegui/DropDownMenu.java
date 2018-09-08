@@ -17,13 +17,14 @@ public class DropDownMenu<T> extends JPanel {
 	T selectedItem;
 
 	public DropDownMenu (String n, T[] objs) {
+		super(new FlowLayout());
 		this.name = n;
 		this.add(new JLabel(RUData.html(n)));
 		itemEntry<T>[] entries = new itemEntry[objs.length];
 		for (int i = 0; i < entries.length; i++)
 			entries[i] = new itemEntry(objs[i]);
 		this.list = new JComboBox(entries);
-
+		this.list.setMaximumSize(new Dimension(200, 50));
 		this.add(this.list);
 	}
 

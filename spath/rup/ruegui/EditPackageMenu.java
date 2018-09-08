@@ -23,7 +23,8 @@ public class EditPackageMenu extends EditorPanel implements ActionListener {
 
 	private ListEditButtons flButtons, slButtons, alButtons;
 
-	private JButton saveButton, unitUpdatesButton;
+	private JButton saveButton, unitUpdatesButton,
+		specialUpdatesButton, artefactUpdatesButton;
 
 	public EditPackageMenu(JFrame parent, RUPackage rup) {
 		super(new BorderLayout(), parent);
@@ -55,8 +56,10 @@ public class EditPackageMenu extends EditorPanel implements ActionListener {
 		this.flButtons.addActionListener(this);
 		fpan.add(this.flButtons);
 		listspan.add(fpan);
-		this.unitUpdatesButton = new JButton(RUData.html("Unit Updates", RUData.titleSize));
-		fpan.add(this.unitUpdatesButton);
+		this.unitUpdatesButton = new JButton(RUData.html("Unit Updates...", RUData.titleSize));
+		JPanel btnpanel = new JPanel();
+		btnpanel.add(this.unitUpdatesButton);
+		fpan.add(btnpanel);
 		this.unitUpdatesButton.addActionListener(this);
 		//build specials list panel
 		JPanel span = new JPanel();
@@ -67,6 +70,12 @@ public class EditPackageMenu extends EditorPanel implements ActionListener {
 		this.slButtons.addActionListener(this);
 		span.add(this.slButtons);
 		listspan.add(span);
+		this.specialUpdatesButton = new JButton(RUData.html("Special Updates...", RUData.titleSize));
+		btnpanel = new JPanel();
+		btnpanel.add(this.specialUpdatesButton);
+		span.add(btnpanel);
+		this.specialUpdatesButton.addActionListener(this);
+
 		//build artefacts list panel
 		JPanel apan = new JPanel();
 		apan.setLayout(new BoxLayout(apan, BoxLayout.Y_AXIS));
@@ -76,6 +85,13 @@ public class EditPackageMenu extends EditorPanel implements ActionListener {
 		this.alButtons.addActionListener(this);
 		apan.add(this.alButtons);
 		listspan.add(apan);
+		this.artefactUpdatesButton = new JButton(RUData.html("Artefact Updates...", RUData.titleSize));
+		btnpanel = new JPanel();
+		btnpanel.add(this.artefactUpdatesButton);
+		apan.add(btnpanel);
+		this.artefactUpdatesButton.addActionListener(this);
+
+
 
 		listspan.setBorder(new EmptyBorder(25, 1, 25, 1));
 		this.add(listspan, BorderLayout.CENTER);
@@ -130,13 +146,15 @@ public class EditPackageMenu extends EditorPanel implements ActionListener {
 			this.artifactList.moveDown();
 		} else if (e.getSource() == this.unitUpdatesButton) {
 			editUnitUpdates();
+		} else if (e.getSource() == this.specialUpdatesButton) {
+			editSpecialUpdates();
+		} else if (e.getSource() == this.artefactUpdatesButton) {
+			editArtefactUpdates();
 		} else if (e.getSource() == saveButton) {
-			System.out.println("save button clicked");
 			//save name
 			String newName = this.nameField.getText();
 			if(!("".equals(newName))) {
 				this.rupackage.setName(newName);
-				System.out.println("new name is: " + this.rupackage.name());
 			}
 			//save forces
 			Force[] forces = new Force[this.forceList.length()];
@@ -227,6 +245,14 @@ public class EditPackageMenu extends EditorPanel implements ActionListener {
 	public void editUnitUpdates() {
 		EditUnitUpdateListMenu euum = new EditUnitUpdateListMenu(this.frame(), this.rupackage.unitUpdates());
 		this.switchTo(euum);
+	}
+	public void editSpecialUpdates() {
+		EditSpecialUpdateListMenu esum = new EditSpecialUpdateListMenu(this.frame(), this.rupackage.specialUpdates());
+		this.switchTo(esum);
+	}
+	public void editArtefactUpdates() {
+		EditArtifactUpdateListMenu eaum = new EditArtifactUpdateListMenu(this.frame(), this.rupackage.artifactUpdates());
+		this.switchTo(eaum);
 	}
 
 	public void panelShown() {

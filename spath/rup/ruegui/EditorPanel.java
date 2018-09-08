@@ -35,11 +35,9 @@ public abstract class EditorPanel extends JPanel {
 
 		this.frame.addComponentListener (new ComponentAdapter() {
 			public void componentShown(ComponentEvent e) {
-				System.out.println("componentShown");
 				panelShown();
 			}
 			public void componentHidden(ComponentEvent e) {
-				System.out.println("componentHidden");
 				panelHidden();
 			}
 		});
@@ -47,11 +45,8 @@ public abstract class EditorPanel extends JPanel {
 		this.frame.addWindowListener(new java.awt.event.WindowAdapter() {
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 				EditorPanel.this.frame.setVisible(false);
-				System.out.println("editor panel invisible");
 				if (EditorPanel.this.parentFrame != null) EditorPanel.this.parentFrame.setVisible(true);
-				System.out.println("parent panel visible");
 				EditorPanel.this.frame.dispose();
-				System.out.println("editor panel disposed.");
 
 				EditorPanel.this.windowClosing();
 			}

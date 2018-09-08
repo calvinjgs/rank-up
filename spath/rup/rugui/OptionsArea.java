@@ -89,14 +89,10 @@ public class OptionsArea extends JPanel implements ActionListener {
 	//removes every unit in the army, similar mashing the remove button
 	//a number of times equal to the number of units in ui.army().detachments.
 	public void clear() {
-		System.out.println("***");
-		System.out.println("begin clear");
 		ArmyElement[][] dets = this.ui.army().detachments();
 		if (dets.length > 0) {//army is not empty
 			this.ui.detachmentsArea().selectNode(0, 0);
-			System.out.println("dets.length = " + dets.length);
 			for (int d = 0; d < dets.length; d++) {
-				System.out.println("dets[d].length = " + dets[d].length);
 				this.ui.detachmentsArea().selectNode(0, 0);
 				for (int u = 0; u < dets[d].length; u++) {
 					this.ui.ARButton().actionPerformed(null);
@@ -128,7 +124,6 @@ public class OptionsArea extends JPanel implements ActionListener {
 
 			String[] armyPackages = SaveLoad.loadUsedPackages(filename);
 			DynamicArray<String> rupsNotFound = new DynamicArray(new String[0]);
-			System.out.println("rups not found in OptionsArea");
 			for (int i = 0; i < armyPackages.length; i++) {
 				boolean pkgFound = false;
 				for (int j = 0; j < this.ui.selectedPackages().length; j++) {
@@ -137,7 +132,6 @@ public class OptionsArea extends JPanel implements ActionListener {
 					}
 				}
 				if (!pkgFound) {
-					System.out.println(armyPackages[i]);
 					rupsNotFound.add(armyPackages[i]);
 				}
 			}
@@ -159,7 +153,6 @@ public class OptionsArea extends JPanel implements ActionListener {
 	public void loadActually(String filename) {
 		ArmyElement[][] dets = SaveLoad.load(filename, RUData.WORKINGPACKAGE.forces(), this.ui.armyReqs());
 
-		System.out.println("clearing");
 		clear();//clear out the current army list.
 		//add in units one-by-one
 		for (int d = 0; d < dets.length; d++) {
@@ -167,25 +160,21 @@ public class OptionsArea extends JPanel implements ActionListener {
 				if ((dets[d][u] instanceof SelectedUnit)) {
 					SelectedUnit unit = (SelectedUnit) dets[d][u];
 					this.ui.setSelectedUnit(unit);
-					System.out.println("selected: " + this.ui.selectedUnit().name());
 				} else if (dets[d][u] instanceof Formation) {
 					Formation formation = (Formation) dets[d][u];
 					this.ui.setSelectedFormation(formation);
 				}
 
 				this.ui.ARButton().setAdd();
-				System.out.println("ARButton action performed");
 				this.ui.ARButton().actionPerformed(null);
 			}
 		}
 
 		if (fc.getSelectedFile() != null) this.selectedFileName = fc.getSelectedFile().getName();
-		System.out.println("updating reqs and displays");
 		//update army requirements
 		this.ui.armyReqs().buildRequirements(this.ui.army().detachments());
 		//call to refresh rugui's displays
 		this.ui.refreshDisplays();
-		System.out.println("open done");
 	}
 
 	public void save() {

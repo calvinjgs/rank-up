@@ -12,6 +12,27 @@ public class Artifact extends Special {
 		super(name);
 	}
 
+	public Artifact clone() {
+		Artifact clone = new Artifact();
+		clone.setName(this.name());
+		clone.setDescription(this.description());
+		clone.setPts(this.pts());
+		return clone;
+	}
+
+	public void applyUpdate(ArtifactUpdate aup) {
+		if (!aup.newName().equals("")) {
+			this.setName(aup.newName());
+		}
+		if (!aup.newDescription().equals("")) {
+			this.setDescription(aup.newDescription());
+		}
+		if (!aup.newPts().equals("")) {
+			this.setPts(aup.newPts());
+		}
+	}
+
+
 	//set things
 	public void setPts(String pts) {
 		this.pts = pts;

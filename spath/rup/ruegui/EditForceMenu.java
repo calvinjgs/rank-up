@@ -141,8 +141,8 @@ public class EditForceMenu extends EditorPanel implements ActionListener {
 
 
 
-	public void panelShown() {System.out.println("EditForceMenu shown");}
-	public void panelHidden() {System.out.println("EditForceMenu hidden");}
+	public void panelShown() {}
+	public void panelHidden() {}
 	public void windowClosing() {}
 
 	//return things

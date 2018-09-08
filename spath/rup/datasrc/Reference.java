@@ -47,6 +47,12 @@ public abstract class Reference<T extends NamedInterface> {
 		}
 	}
 
+	public void referTo(T obj, String pkgN) {
+		this.setPkgName(pkgN);
+		this.setObjName(obj.name());
+		this.setObject(obj);
+	}
+
 	//set things
 	public void setPkgName(String pkgN) {
 		this.pkgName = pkgN;

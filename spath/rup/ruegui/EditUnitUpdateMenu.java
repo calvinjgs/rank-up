@@ -64,15 +64,17 @@ public class EditUnitUpdateMenu extends EditorPanel implements ActionListener {
 
 
 		this.frame().add(this);
-		this.frame().setSize(450, 500);
+		//this.frame().setSize(450, 500);
 		this.frame().pack();
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		if (this.packageNameMenu.caused(e)) {
 			updateForceList();
+			this.frame().pack();
 		} else if (this.forceNameMenu.caused(e)) {
 			updateUnitList();
+			this.frame().pack();
 		} else if (e.getSource() == this.editStatsButton) {
 			this.unitWithUpdates = unitNameMenu.selectedItem().clone();
 			this.unitWithUpdates.applyUpdate(this.unitUpdate);
@@ -250,7 +252,7 @@ public class EditUnitUpdateMenu extends EditorPanel implements ActionListener {
 	}
 
 
-	public void panelShown() {}
+	public void panelShown() {this.frame().pack();}
 	public void panelHidden() {}
 	public void windowClosing() {}
 

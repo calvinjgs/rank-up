@@ -34,7 +34,20 @@ public class SavePackage {
 			System.out.println("saving unit update");
 			s += RUData.beginUnitUpdate + unitUpdateString(unitUpdate) + RUData.endUnitUpdate;
 		}
-		//TODO formation, special and artefact updates
+		//save special updates
+		for (int i = 0; i < rupackage.specialUpdates().length; i++) {
+			SpecialUpdate specialUpdate = rupackage.specialUpdates(i);
+			System.out.println("saving special update");
+			s += RUData.beginSpecialUpdate + specialUpdateString(specialUpdate) + RUData.endSpecialUpdate;
+		}
+		//save artifact updates
+		for (int i = 0; i < rupackage.artifactUpdates().length; i++) {
+			ArtifactUpdate artifactUpdate = rupackage.artifactUpdates(i);
+			System.out.println("saving artifact update");
+			s += RUData.beginArtifactUpdate + artifactUpdateString(artifactUpdate) + RUData.endArtifactUpdate;
+		}
+
+		//TODO formation updates
 
 		return s;
 	}
@@ -241,6 +254,32 @@ public class SavePackage {
 			s += RUData.beginRemoveOption + optionString(option) + RUData.endRemoveOption;
 		}
 
+		return s;
+	}
+
+
+	public static String specialUpdateString(SpecialUpdate specialUpdate) {
+		String s = "";
+		//save names
+		s += RUData.beginPackageName + specialUpdate.pkgName() + RUData.endPackageName;
+		s += RUData.beginName + specialUpdate.objName() + RUData.endName;
+		s += RUData.beginNewSpecialName + specialUpdate.newName() + RUData.endNewSpecialName;
+		//save desc
+		s += RUData.beginDesc + specialUpdate.newDescription() + RUData.endDesc;
+
+		return s;
+	}
+
+	public static String artifactUpdateString(ArtifactUpdate artifactUpdate) {
+		String s = "";
+		//save names
+		s += RUData.beginPackageName + artifactUpdate.pkgName() + RUData.endPackageName;
+		s += RUData.beginName + artifactUpdate.objName() + RUData.endName;
+		s += RUData.beginNewArtifactName + artifactUpdate.newName() + RUData.endNewArtifactName;
+		//save desc
+		s += RUData.beginDesc + artifactUpdate.newDescription() + RUData.endDesc;
+		//save pts
+		s += RUData.beginPts + artifactUpdate.newPts() + RUData.endPts;
 		return s;
 	}
 

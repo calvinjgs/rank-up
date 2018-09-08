@@ -90,13 +90,11 @@ public class SaveLoad {
 				if (det != null) detsDA.add(det);
 			}
 		}
-		System.out.println("returning army");
 		detsDA.trim();
 		return detsDA.storage();
 	}
 
 	private static ArmyElement[] loadDetachment(String farg, Force[] forces) {
-		System.out.println("load detachment");
 		Scanner fscn = new Scanner(farg);
 		String fname = Compile.nextArg(fscn, RUData.beginName, RUData.endName);
 		int findex = -1;
@@ -131,27 +129,20 @@ public class SaveLoad {
 					}
 					aearg = Compile.nextArg(fscn, RUData.beginArmyElement, RUData.endArmyElement);
 				}
-				System.out.println("returning det");
 				det.trim();
 				return det.storage();
 			}
 		}
-		System.out.println("no det found");
 		return null;//no force was found.
 	}
 
 	private static SelectedUnit loadUnit(String uarg, Force force) {
-		System.out.println("load unit");
 		SelectedUnit su = new SelectedUnit();
 		Scanner uscn;
 		String uname;
 		uscn = new Scanner(uarg);
-		System.out.println("uarg:");
-		System.out.println(uarg);
-		System.out.println("end uarg");
 		uname = Compile.nextArg(uscn, RUData.beginName, RUData.endName);
 		int uindex = -1;
-		System.out.println("uname = " + uname);
 		if (uname != null) {
 			//get unit index.
 			for (int u = 0; u < force.units().length; u++) {
@@ -161,20 +152,16 @@ public class SaveLoad {
 				}
 			}
 		}
-		System.out.println("uindex = " + uindex);
 		if (uindex > -1) {
 			//set unit
 			su.setUnit(force.units(uindex));
 			uscn = new Scanner(uarg);
 			String size =  Compile.nextArg(uscn, RUData.beginSize, RUData.endSize);
-			System.out.println("size = " + size);
 			int si = Integer.parseInt(size);
 			su.setSize(si);
 			String option = "";
 			uscn = new Scanner(uarg);
-			System.out.println("option != null = " + option != null);
 			while (option != null) {
-				System.out.println("");
 				option = Compile.nextArg(uscn, RUData.beginSelectedOption, RUData.endSelectedOption);
 				int o = -1;
 				int f = -1;
@@ -182,7 +169,6 @@ public class SaveLoad {
 					//might throw errors, consider handling them.
 					o = Integer.parseInt(option.substring(0,1));
 					f = Integer.parseInt(option.substring(2,3));
-					System.out.println("options: " + o + ", " + f);
 					su.setSelectedOptions(o, f);
 				}
 			}
@@ -192,16 +178,13 @@ public class SaveLoad {
 			if (artefact != null) {
 				for (int a = 0; a < RUData.WORKINGPACKAGE.artifacts().length; a++) {
 					if (artefact.equals(RUData.WORKINGPACKAGE.artifacts(a).name())) {
-						System.out.println("artefact = " + artefact);
 						su.setArtefact(RUData.WORKINGPACKAGE.artifacts(a));
 						break;
 					}
 				}
 			}
-			System.out.println("returning unit");
 			return su;
 		}
-		System.out.println("no unit found");
 		return null;//unit wasn't found.
 	}
 

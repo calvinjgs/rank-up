@@ -2,7 +2,7 @@ package rup.datasrc;
 
 import rup.tools.*;
 
-public class Special {
+public class Special implements NamedInterface {
 
 	private String name;
 	private String description;
@@ -26,6 +26,22 @@ public class Special {
 			return (this.name.equals(spec.name()));
 		}
 		return false;
+	}
+
+	public Special clone() {
+		Special clone = new Special();
+		clone.setName(this.name());
+		clone.setDescription(this.description());
+		return clone;
+	}
+
+	public void applyUpdate(SpecialUpdate sup) {
+		if (!sup.newName().equals("")) {
+			this.name = sup.newName();
+		}
+		if (!sup.newDescription().equals("")) {
+			this.description = sup.newDescription();
+		}
 	}
 
 	//set things

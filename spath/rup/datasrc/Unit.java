@@ -79,7 +79,7 @@ public class Unit implements NamedInterface {
 						if (!"".equals(updateSize.att())) thisSize.setAtt(updateSize.att());
 						if (!"".equals(updateSize.neW())) thisSize.setNeW(updateSize.neW());
 						if (!"".equals(updateSize.neR())) thisSize.setNeR(updateSize.neR());
-						if (!"".equals(updateSize.pts())) thisSize.setNeR(updateSize.pts());
+						if (!"".equals(updateSize.pts())) thisSize.setPts(updateSize.pts());
 					}
 				}
 			}

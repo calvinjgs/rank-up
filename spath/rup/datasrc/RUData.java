@@ -46,6 +46,10 @@ public class RUData {//are you?
 	public static final String beginUpdateForce = "<updateforce>";
 	public static final String beginNewUnitName = "<newunitname>";
 	public static final String beginArmyElement = "<armyelement>";
+	public static final String beginSpecialUpdate = "<specialupdate>";
+	public static final String beginNewSpecialName = "<newspecialname>";
+	public static final String beginArtifactUpdate = "<artifactupdate>";
+	public static final String beginNewArtifactName = "<newartifactname>";
 
 
 	public static final String endForce = "</force>";
@@ -76,6 +80,10 @@ public class RUData {//are you?
 	public static final String endUpdateForce = "</updateforce>";
 	public static final String endNewUnitName = "</newunitname>";
 	public static final String endArmyElement = "</armyelement>";
+	public static final String endSpecialUpdate = "</specialupdate>";
+	public static final String endNewSpecialName = "</newspecialname>";
+	public static final String endArtifactUpdate = "</artifactupdate>";
+	public static final String endNewArtifactName = "</newartifactname>";
 
 
 	public static final String beginSp = "<sp>";

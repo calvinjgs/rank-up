@@ -48,11 +48,6 @@ public class UnitUpdate extends Reference<Unit> {
 	public void setUnitName(String un) {
 		super.setObjName(un);
 	}
-/*
-	public void setUnitName(String un) {
-		this.setUnitName(un);
-	}
-*/
 	public void setNewUnitName(String un) {
 		this.newUnitName = un;
 	}

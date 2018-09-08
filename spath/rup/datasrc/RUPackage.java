@@ -10,6 +10,8 @@ public class RUPackage {
 	private Artifact[] artifacts;
 
 	private UnitUpdate[] unitUpdates;
+	private SpecialUpdate[] specialUpdates;
+	private ArtifactUpdate[] artifactUpdates;
 	private boolean updatesApplied;
 
 	public RUPackage() {
@@ -20,6 +22,8 @@ public class RUPackage {
 		this.artifacts = new Artifact[0];
 
 		this.unitUpdates = new UnitUpdate[0];
+		this.specialUpdates = new SpecialUpdate[0];
+		this.artifactUpdates = new ArtifactUpdate[0];
 		this.updatesApplied = false;
 	}
 
@@ -42,11 +46,13 @@ public class RUPackage {
 			}
 		}
 		mergedRup.setName(name);
-		//merge forces
+
 		DynamicArray<Force> forces = new DynamicArray(new Force[0]);
 		DynamicArray<Special> specials = new DynamicArray(new Special[0]);
 		DynamicArray<Artifact> artifacts = new DynamicArray(new Artifact[0]);
 		DynamicArray<UnitUpdate> unitUpdates = new DynamicArray(new UnitUpdate[0]);
+		DynamicArray<SpecialUpdate> specialUpdates = new DynamicArray(new SpecialUpdate[0]);
+		DynamicArray<ArtifactUpdate> artifactUpdates = new DynamicArray(new ArtifactUpdate[0]);
 
 		for (int i = 0; i < rups.length; i++) {
 
@@ -69,6 +75,8 @@ public class RUPackage {
 			specials.add(rups[i].specials());
 			artifacts.add(rups[i].artifacts());
 			unitUpdates.add(rups[i].unitUpdates());
+			specialUpdates.add(rups[i].specialUpdates());
+			artifactUpdates.add(rups[i].artifactUpdates());
 
 		}
 		forces.trim(); specials.trim(); artifacts.trim();
@@ -76,6 +84,8 @@ public class RUPackage {
 		mergedRup.setSpecials(specials.storage());
 		mergedRup.setArtifacts(artifacts.storage());
 		mergedRup.setUnitUpdates(unitUpdates.storage());
+		mergedRup.setSpecialUpdates(specialUpdates.storage());
+		mergedRup.setArtifactUpdates(artifactUpdates.storage());
 
 		return mergedRup;
 	}
@@ -85,6 +95,11 @@ public class RUPackage {
 		uda.add(forceB.units());
 		uda.trim();
 		forceA.setUnits(uda.storage());
+		DynamicArray<Formation> fda = new DynamicArray(forceA.formations());
+		fda.add(forceB.formations());
+		fda.trim();
+		forceA.setFormations(fda.storage());
+
 	}
 
 	public void applyUpdates() {
@@ -98,114 +113,37 @@ public class RUPackage {
 				if (ua.forceName().equals(this.forces[j].name())) {
 					//match and apply, or keep looking.
 					if (ua.unit(this.forces[j].units()) != null) {
-						applyUnitUpdate(ua.unit(), ua);
+						ua.unit().applyUpdate(ua);
 						break;
 					}
 				}
 			}
 		}
 
-		//TODO: update artefacts, fomations and specials.
+		//update specials
+		for (int i = 0; i < this.specialUpdates.length; i++) {
+			SpecialUpdate su = this.specialUpdates[i];
+			//match and apply, or keep looking.
+			if (su.special(this.specials()) != null) {
+				su.special().applyUpdate(su);
+			}
+		}
+
+		//update artefacts
+		for (int i = 0; i < this.artifactUpdates.length; i++) {
+			ArtifactUpdate au = this.artifactUpdates[i];
+			//match and apply, or keep looking.
+			if (au.artifact(this.artifacts()) != null) {
+				au.artifact().applyUpdate(au);
+			}
+		}
+
+
+		//TODO: update formations.
 
 		this.updatesApplied = true;
 	}
 
-	private static void applyUnitUpdate(Unit u, UnitUpdate uu) {
-
-		if (uu.removeSizes().length > 0) {
-			//remove sizes from existing sizes
-			DynamicArray<UnitSize> temp = new DynamicArray(u.sizes());
-			for (int j = 0; j < uu.removeSizes().length; j++) {
-				for (int i = 0; i < temp.size(); i++) {
-					if (temp.storage(i).name().equals(uu.removeSizes(j).name())) {
-						temp.remove(i);
-					}
-				}
-			}
-			temp.trim();
-			u.setSizes(temp.storage());
-		}
-		if (uu.editSizes().length > 0) {
-			//edit sizes from existing sizes
-			DynamicArray<UnitSize> temp = new DynamicArray(u.sizes());
-			for (int j = 0; j < uu.editSizes().length; j++) {
-				for (int i = 0; i < temp.size(); i++) {
-					if (temp.storage(i).name().equals(uu.editSizes(j).name())) {
-						UnitSize thisize = temp.storage(i);
-						UnitSize updsize = uu.editSizes(j);
-						if (!"".equals(updsize.sp())) thisize.setSp(updsize.sp());
-						if (!"".equals(updsize.me())) thisize.setMe(updsize.me());
-						if (!"".equals(updsize.ra())) thisize.setRa(updsize.ra());
-						if (!"".equals(updsize.de())) thisize.setDe(updsize.de());
-						if (!"".equals(updsize.att())) thisize.setAtt(updsize.att());
-						if (!"".equals(updsize.neW())) thisize.setNeW(updsize.neW());
-						if (!"".equals(updsize.neR())) thisize.setNeR(updsize.neR());
-						if (!"".equals(updsize.pts())) thisize.setPts(updsize.pts());
-					}
-				}
-			}
-
-		}
-		if (uu.addSizes().length > 0) {
-			//add sizes to existing sizes
-			DynamicArray<UnitSize> temp = new DynamicArray(u.sizes());
-			temp.add(uu.addSizes());
-			temp.trim();
-			u.setSizes(temp.storage());
-		}
-
-
-
-		if (uu.removeSpecials().length > 0) {
-			//remove specials from existing specials
-			DynamicArray<SpecialRef> temp = new DynamicArray(u.specials());
-			for (int j = 0; j < uu.removeSpecials().length; j++) {
-				for (int i = 0; i < temp.size(); i++) {
-					if (temp.storage(i).specName().equals(uu.removeSpecials(j).specName())) {
-						temp.remove(i);
-					}
-				}
-			}
-			temp.trim();
-			u.setSpecials(temp.storage());
-		}
-		if (uu.addSpecials().length > 0) {
-			//add specials to existing specials
-			DynamicArray<SpecialRef> temp = new DynamicArray(u.specials());
-			temp.add(uu.addSpecials());
-			temp.trim();
-			u.setSpecials(temp.storage());
-		}
-
-		if (uu.removeOptions().length > 0) {
-			//remove options from existing options
-			DynamicArray<UnitOption> temp = new DynamicArray(u.options());
-			for (int j = 0; j < uu.removeOptions().length; j++) {
-				for (int i = 0; i < temp.size(); i++) {
-					if (temp.storage(i).toString().equals(uu.removeOptions(j).toString())) {
-						temp.remove(i);
-					}
-				}
-			}
-			temp.trim();
-			u.setOptions(temp.storage());
-		}
-		//TODO apply editOptions
-		if (uu.addOptions().length > 0) {
-			//add options to existing options
-			DynamicArray<UnitOption> temp = new DynamicArray(u.options());
-			temp.add(uu.addOptions());
-			temp.trim();
-			u.setOptions(temp.storage());
-		}
-
-
-		if (uu.type() != null) {
-			u.setType(uu.type());
-		}
-
-
-	}
 
 	//set things
 	public void setName(String n) {
@@ -223,7 +161,12 @@ public class RUPackage {
 	public void setUnitUpdates(UnitUpdate[] uas) {
 		this.unitUpdates = uas;
 	}
-
+	public void setSpecialUpdates(SpecialUpdate[] sups) {
+		this.specialUpdates = sups;
+	}
+	public void setArtifactUpdates(ArtifactUpdate[] sups) {
+		this.artifactUpdates = sups;
+	}
 	//return things
 	public String name() {
 		return this.name;
@@ -253,7 +196,18 @@ public class RUPackage {
 	public UnitUpdate unitUpdates(int i) {
 		return this.unitUpdates[i];
 	}
-
+	public SpecialUpdate[] specialUpdates() {
+		return this.specialUpdates;
+	}
+	public SpecialUpdate specialUpdates(int i) {
+		return this.specialUpdates[i];
+	}
+	public ArtifactUpdate[] artifactUpdates() {
+		return this.artifactUpdates;
+	}
+	public ArtifactUpdate artifactUpdates(int i) {
+		return this.artifactUpdates[i];
+	}
 
 
 }

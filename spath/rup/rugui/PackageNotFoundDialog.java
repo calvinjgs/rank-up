@@ -100,9 +100,7 @@ public class PackageNotFoundDialog extends JDialog implements ActionListener {
 		if (e.getSource() == this.loadWithPackagesButton) {
 			RUPackage[] rups = new RUPackage[this.rupsNeeded.length];
 			for (int i = 0; i < this.rupsNeeded.length; i++) {
-				System.out.println(this.rupsNeeded[i]);
 				rups[i] = Compile.compileRUPackage(Compile.getRUPackageFileName(this.rupsNeeded[i]));
-				System.out.println(rups[i]);
 			}
 			this.ui.setSelectedPackages(rups);
 			this.ui.optionsArea().loadActually(this.filename);
