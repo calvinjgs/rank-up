@@ -18,7 +18,7 @@ public class OptionsArea extends JPanel implements ActionListener {
 
 	private JButton clearButton, openButton, saveButton;
 	private JButton exportToHTMLButton, quickExportButton, ExportToTXTButton;
-	private JButton exportOptionsButton;
+	private JButton exportOptionsButton, aboutButton;
 	private JFileChooser fc;
 	private String selectedFileName;
 
@@ -63,6 +63,10 @@ public class OptionsArea extends JPanel implements ActionListener {
 		this.exportOptionsButton.addActionListener(this);
 		this.add(exportOptionsButton);
 
+		this.aboutButton = new JButton(RUData.html("About"));
+		this.aboutButton.setMinimumSize(new Dimension(this.getWidth(), aboutButton.getMinimumSize().height));
+		this.aboutButton.addActionListener(this);
+		this.add(aboutButton);
 
 		this.fc = new JFileChooser();
 
@@ -83,6 +87,8 @@ public class OptionsArea extends JPanel implements ActionListener {
 			exportToTXT();
 		} else if (e.getSource() == exportOptionsButton) {
 			exportOptions();
+		} else if (e.getSource() == aboutButton) {
+			about();
 		}
 	}
 
@@ -267,6 +273,12 @@ public class OptionsArea extends JPanel implements ActionListener {
 		//spawn an ExportOptionsDialog window
 		ExportOptionsDialog eod = new ExportOptionsDialog(this.ui);
 		eod.setVisible(true);
+	}
+
+	public void about() {
+		//spawn an aboutDialog window
+		AboutDialog ad = new AboutDialog(this.ui);
+		ad.setVisible(true);
 	}
 
 }

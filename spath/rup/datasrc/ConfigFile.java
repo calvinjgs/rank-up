@@ -57,7 +57,7 @@ public class ConfigFile {
 
 	public static String boilerplate() {
 		String s = "";
-		s += "Configuration file for Rank Up and Rank Up Editor";
+		s += "Configuration file for Rank Up and Rank Up Editor v" + RUData.VERSION;
 		return s;
 	}
 
